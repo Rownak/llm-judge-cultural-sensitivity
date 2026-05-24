@@ -2,7 +2,7 @@
 LLM-as-Judge: Pairwise evaluation using Claude or DeepSeek with structured output.
 
 Loads test_set.csv, runs judge_prompt_v1 against each pair, saves results
-to data/judge_results_{model_slug}_v{rubric_version}.json.
+to results/judge_results_{model_slug}_v{rubric_version}.json.
 
 Supported models
 ----------------
@@ -235,7 +235,7 @@ def run_pairwise_judge(
     csv_path    : path to test_set.csv (or dev_set.csv)
     model       : model name — selects provider automatically
     output_path : output JSON path; defaults to
-                  data/judge_results_{model_slug}_v{RUBRIC_VERSION}.json
+                  results/judge_results_{model_slug}_v{RUBRIC_VERSION}.json
 
     Returns
     -------
@@ -265,10 +265,12 @@ def run_pairwise_judge(
             print(f"ERROR: {e}")
             raise
 
-    # Build output path: judge_results_claude-haiku-4-5_v1.0.json
+    # Build output path: results/judge_results_claude-haiku-4-5_v1.0.json
     if output_path is None:
+        results_dir = Path(__file__).parent.parent / "results"
+        results_dir.mkdir(parents=True, exist_ok=True)
         model_slug = model.replace("/", "-")
-        output_path = csv_path.parent / f"judge_results_{model_slug}_v{RUBRIC_VERSION}.json"
+        output_path = results_dir / f"judge_results_{model_slug}_v{RUBRIC_VERSION}.json"
     else:
         output_path = Path(output_path)
 

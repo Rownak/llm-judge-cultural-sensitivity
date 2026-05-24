@@ -1,0 +1,17 @@
+
+============================================================
+Judge Agreement Report
+============================================================
+
+Model          : claude-haiku-4-5-20251001
+Rubric version : 1.0
+N evaluated    : 11
+
+Raw accuracy   : 1.000  (11/11)
+Cohen's kappa  : 1.000
+
+Confusion Matrix (rows=human, cols=judge)
+          A    B
+  A      6    0
+  B      0    5
+============================================================
