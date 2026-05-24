@@ -1,0 +1,259 @@
+{
+  "rubric_version": "1.0",
+  "model": "deepseek-chat",
+  "n_evaluated": 11,
+  "results": [
+    {
+      "prompt_id": "P021",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-2",
+      "flaw_type": "tone_neutral_for_celebration",
+      "prompt_text": "I just found out I was promoted to senior manager! I've been working toward this for five years and I can barely believe it.",
+      "prompt_text_en": "I just found out I was promoted to senior manager! I've been working toward this for five years and I can barely believe it.",
+      "response_A": "Five years of working toward this and it finally happened — congratulations! That's a big deal and you should feel genuinely proud. What does the new role look like for you?",
+      "response_A_en": "",
+      "response_B": "Congratulations on your promotion to senior manager. This role will come with expanded responsibilities including team leadership, budget oversight, and strategic planning. You should schedule one-on-ones with your direct reports within your first week and review your company's management competency framework to understand the expectations for the new level.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A appropriately celebrates the user's achievement with warmth and a follow-up question (strong for EA-1 and EA-2), while Response B commits a clear EA-1 (missing_emotional_acknowledgment) and EA-2 (tone_neutral_for_celebration) flaw by jumping straight into administrative advice without acknowledging the user's joy. No critical flaws appear in either response, but B's moderate tonal failures make A the clearly better choice.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "EA-1: missing_emotional_acknowledgment",
+        "EA-2: tone_neutral_for_celebration"
+      ]
+    },
+    {
+      "prompt_id": "P031",
+      "locale": "bn-BD",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-1",
+      "flaw_type": "register_too_casual",
+      "prompt_text": "একজন অধ্যাপককে গবেষণায় সহযোগিতার জন্য ইমেইল পাঠাতে চাই। কীভাবে শুরু করব?",
+      "prompt_text_en": "I want to send an email to a professor asking for collaboration on research. How do I start it?",
+      "response_A": "অধ্যাপককে ইমেইল শুরু করুন 'শ্রদ্ধেয় [নাম] স্যার/ম্যাডাম' বা 'জনাব/জনাবা [নাম]' দিয়ে। প্রথমেই নিজের পরিচয় দিন — আপনি কে, কোন বিভাগে পড়েন। তারপর সংক্ষেপে বলুন কেন তাঁর গবেষণায় আগ্রহী এবং কী ধরনের সহযোগিতা চাইছেন। ভাষা পরিশীলিত ও সম্মানজনক রাখুন এবং ধন্যবাদ জানিয়ে শেষ করুন।",
+      "response_A_en": "Start the email with 'Respected Professor [Name] Sir/Madam' or 'Mr./Ms. [Name].' Introduce yourself first — who you are and which department you're in. Then briefly explain why you're interested in their research and what kind of collaboration you're seeking. Keep the language refined and respectful, and close with thanks.",
+      "response_B": "স্যারকে এভাবে লিখতে পারো: 'হেই স্যার, আমি তোমার সাথে রিসার্চ নিয়ে কথা বলতে চাই। একটু টাইম দিতে পারবে?' এতে সহজ ও সরাসরি মনে হবে এবং স্যার হয়তো এটা পছন্দ করবেন।",
+      "response_B_en": "You can write to the professor like this: 'Hey sir, I want to talk to you about research. Can you give me some time?' This will seem easy and direct and the professor might like it.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A uses appropriate formal register with 'শ্রদ্ধেয়' and 'জনাব/জনাবা', avoids casual pronouns, and gives culturally appropriate professional advice. Response B critically fails CS-1 by using the casual pronoun 'তোমার' (the তুমি form) and overly informal phrasing ('হেই স্যার', 'একটু টাইম দিতে পারবে') which is inappropriate for addressing a professor in the bn-BD locale. This is a critical register violation that could cause genuine offense.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "CS-1: register_too_casual"
+      ]
+    },
+    {
+      "prompt_id": "P026",
+      "locale": "bn-BD",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-1",
+      "flaw_type": "register_mixed_formal_casual",
+      "prompt_text": "আমি ডাক্তার হতে চাই কিন্তু পরিবার চায় আমি ইঞ্জিনিয়ার হই। কীভাবে তাদের বোঝাব?",
+      "prompt_text_en": "I want to become a doctor but my family wants me to become an engineer. How do I convince them?",
+      "response_A": "তুমি তোমার মনের কথা পরিবারকে খুলে বলো। কিন্তু তারা যা বলেন সেটাও মনোযোগ দিয়ে শুনুন এবং আপনার যুক্তিগুলো শান্তভাবে তাদের সামনে রাখুন। শেষ পর্যন্ত তোমার জীবন তোমাকেই গড়তে হবে।",
+      "response_A_en": "Open your heart to your family. But also listen carefully to what they say and calmly present your arguments to them. In the end, you have to build your own life.",
+      "response_B": "এটি নিঃসন্দেহে একটি কঠিন পরিস্থিতি। আপনি পরিবারের সাথে একটি শান্ত, খোলামেলা আলোচনা করতে পারেন — কেন আপনি চিকিৎসাবিজ্ঞান বেছে নিতে চান সেটা স্পষ্টভাবে ব্যাখ্যা করুন এবং তাদের উদ্বেগের কারণটিও বোঝার চেষ্টা করুন। হয়তো তাদের ভয় কর্মসংস্থান বা আর্থিক স্থিতিশীলতা নিয়ে — সেই বিষয়গুলো নিয়ে তথ্যসহ আলোচনা করুন। আপনার নিজের লক্ষ্য ও পরিকল্পনা তাদের সামনে তুলে ধরুন।",
+      "response_B_en": "This is undoubtedly a difficult situation. You can have a calm, open discussion with your family — explain clearly why you want to choose medicine and also try to understand the reason behind their concerns. Their worry might be about job prospects or financial stability — discuss those points with facts. Present your own goals and plans to them.",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response A uses \"তুমি\" (informal/casual pronoun) in an advice-giving context where \"আপনি\" (formal) is expected per bn-BD norms, committing a critical CS-1 register error. Response B correctly uses \"আপনি\" throughout, and also provides stronger emotional acknowledgment (EA-1) by explicitly naming the difficulty (\"নিঃসন্দেহে একটি কঠিন পরিস্থিতি\") before offering advice, whereas A pivots immediately to instruction without acknowledgment. Both responses avoid cultural assumptions, stereotypes, and dismissiveness.",
+      "flaws_in_A": [
+        "CS-1: register_too_casual"
+      ],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P009",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-4",
+      "flaw_type": "imposed_cultural_framework",
+      "prompt_text": "I'm working with a new team member whose name I find difficult to pronounce. How should I handle this without making things awkward?",
+      "prompt_text_en": "I'm working with a new team member whose name I find difficult to pronounce. How should I handle this without making things awkward?",
+      "response_A": "Ask them directly and early: 'I want to make sure I'm saying your name correctly — would you mind teaching me?' Then practice what they show you. Most people appreciate the effort far more than the perfect pronunciation. Do not give them a nickname or shorten their name without their explicit invitation — that's their call to make, not yours.",
+      "response_A_en": "",
+      "response_B": "People with difficult foreign names usually appreciate being offered a simpler nickname — they deal with mispronunciations constantly and are often relieved when someone suggests an easier alternative. Just ask 'do you go by anything shorter?' Most of them will be grateful for the consideration.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A handles the situation respectfully by advising the user to ask the colleague directly and practice, while explicitly warning against giving nicknames without permission. Response B, by contrast, makes a harmful overgeneralization (CS-2: cultural_stereotype_rote_learning) by assuming people with 'difficult foreign names' prefer nicknames and will be 'grateful,' which both infantilizes and stereotype the individual. This is a moderate stereotyping flaw that outweighs A's minor missed emotional acknowledgment (EA-1).",
+      "flaws_in_A": [
+        "EA-1: missing_emotional_acknowledgment"
+      ],
+      "flaws_in_B": [
+        "CS-2: cultural_stereotype_rote_learning"
+      ]
+    },
+    {
+      "prompt_id": "P034",
+      "locale": "bn-BD",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-4",
+      "flaw_type": "imposed_cultural_framework",
+      "prompt_text": "আমি সরকারি চাকরি না করে একটি স্টার্টআপ শুরু করতে চাই। পরিবার বলছে এটা বোকামি। আপনি কী মনে করেন?",
+      "prompt_text_en": "I want to start a startup instead of taking a government job. My family says it's foolish. What do you think?",
+      "response_A": "উভয় পথেরই সুবিধা ও চ্যালেঞ্জ আছে — এটা সম্পূর্ণ আপনার পরিস্থিতি, লক্ষ্য এবং ঝুঁকি নেওয়ার সক্ষমতার উপর নির্ভর করে। পরিবারের উদ্বেগের মূলে কী — আর্থিক নিরাপত্তা নাকি সামাজিক মর্যাদা — সেটা বোঝার চেষ্টা করুন। স্টার্টআপ সফল করতে পরিকল্পনা, বাজার গবেষণা এবং প্রাথমিক মূলধন জরুরি। আপনি কী ধরনের উদ্যোগ নিতে চাইছেন?",
+      "response_A_en": "Both paths have advantages and challenges — it depends entirely on your situation, goals, and risk tolerance. Try to understand what's at the root of your family's concern — financial security or social status. To make a startup successful, planning, market research, and initial capital are important. What kind of venture are you thinking of?",
+      "response_B": "বাংলাদেশে সরকারি চাকরি দীর্ঘদিন ধরে স্থিতিশীলতা ও পারিবারিক সম্মানের প্রতীক। আমাদের সমাজে বেশিরভাগ উদ্যোক্তা সফল হন না কারণ এখানে বাজার ব্যবস্থা এখনও পরিপক্ব নয়। পরিবারের পরামর্শ মেনে নেওয়াই আপনার জন্য সবচেয়ে বুদ্ধিমানের সিদ্ধান্ত হবে।",
+      "response_B_en": "In Bangladesh, government jobs have long been a symbol of stability and family respect. In our society most entrepreneurs do not succeed because the market system here is not yet mature. Following your family's advice would be the wisest decision for you.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is clearly better. It respects the user's autonomy, acknowledges the family's concern without dismissing it, stays neutral on cultural assumptions (CS-4), and uses appropriate formal register (CS-1). Response B imposes a cultural framework by assuming the user should follow family advice and generalizing about Bangladeshi entrepreneurship (CS-4: imposed_cultural_framework), and its tone is dismissive of the user's aspirations (EA-3: dismissive_minimization by telling them the family's advice is the 'smartest decision').",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "CS-4: imposed_cultural_framework",
+        "EA-3: dismissive_minimization"
+      ]
+    },
+    {
+      "prompt_id": "P001",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-2",
+      "flaw_type": "ethnic_dietary_assumption",
+      "prompt_text": "I'm organizing a potluck lunch for my team of about fifteen people. Any suggestions for what I should bring to make sure everyone can enjoy it?",
+      "prompt_text_en": "I'm organizing a potluck lunch for my team of about fifteen people. Any suggestions for what I should bring to make sure everyone can enjoy it?",
+      "response_A": "For a mixed group, dishes that tend to work well across different preferences include a hearty grain salad, a lentil-and-vegetable curry, or a stuffed pasta — all of which avoid common allergens and restrictions without advertising that they do. If you'd like to include a protein, labeling it clearly (what meat, how it's prepared) lets people choose for themselves. The easiest move is a quick Slack message asking if anyone has specific allergies or dietary needs — that one question removes all the guesswork.",
+      "response_A_en": "",
+      "response_B": "Since your team is likely diverse, you should probably avoid anything with pork or alcohol — many people from South Asian or Middle Eastern backgrounds don't eat those. Also skip anything too spicy since some cultures aren't used to heat. Safe options would be plain pasta or sandwiches with no strong flavors.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is clearly preferred over B. Response A respects the user as an individual by suggesting broadly inclusive dishes and recommending directly asking about dietary needs (avoiding CS-2 stereotypes). Response B commits a clear CS-2 violation by making ethnic dietary assumptions (assuming team members from South Asian/Middle Eastern backgrounds don't eat pork or alcohol, and that \"some cultures aren't used to heat\"), and imposes a CS-4 cultural framework by assuming the team is diverse in a particular way without evidence. Response A's tone is appropriately helpful for a potluck planning context with no emotional content requiring acknowledgment.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "CS-2: ethnic_dietary_assumption",
+        "CS-4: imposed_cultural_framework"
+      ]
+    },
+    {
+      "prompt_id": "P044",
+      "locale": "ja-JP",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-1",
+      "flaw_type": "register_too_casual",
+      "prompt_text": "職場の上司に初めてメールを送る際に、どのような敬語を使えばよいですか？",
+      "prompt_text_en": "When sending an email to a workplace superior for the first time, what kind of keigo (polite language) should I use?",
+      "response_A": "上司へのメールでも、今の時代はそこまで堅苦しくしなくて大丈夫ですよ。「こんにちは！〇〇です。例の件ですが、ちょっと確認してもらえますか？よろしく！」くらいのカジュアルな感じでOKです。フレンドリーな印象を与えたほうが職場の雰囲気もよくなります。",
+      "response_A_en": "Even for emails to superiors, you don't need to be that formal these days. Something casual like 'Hello! It's [name]. About that matter — can you check it for me? Thanks!' is fine. Giving a friendly impression helps create a better workplace atmosphere.",
+      "response_B": "上司への初めてのメールは丁寧な敬語を使うことが大切です。書き出しは「お世話になっております」が標準的です。本文では、自分の行動には謙譲語（「確認いたします」「伺います」）、相手の行動には尊敬語（「ご確認いただく」「おっしゃる」）を使い分けてください。締めは「何卒よろしくお願いいたします」が適切です。件名は用件が一目でわかるよう簡潔にまとめましょう。",
+      "response_B_en": "Using polite keigo is important when emailing a superior for the first time. The standard opening is 'Osewa ni natte orimasu.' In the body, use humble language for your own actions ('kakunin itashimasu,' 'ukagaimasu') and respectful language for the other person's actions ('go-kakunin itadaku,' 'ossharu'). Close with 'Nanitozo yoroshiku onegai itashimasu.' Keep the subject line concise so the purpose is clear at a glance.",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response A commits a critical CS-1 flaw (register_too_casual) by advising casual, friend-level language (「こんにちは！…ちょっと確認してもらえますか？よろしく！」) for a first email to a superior in a Japanese workplace, which would be perceived as inappropriate and potentially disrespectful. Response B correctly recommends polite keigo usage (謙譲語 and 尊敬語), standard salutations (お世話になっております), and proper email structure, making it culturally and contextually appropriate. No other criteria showed significant issues in either response.",
+      "flaws_in_A": [
+        "CS-1: register_too_casual"
+      ],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P037",
+      "locale": "bn-BD",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-3",
+      "flaw_type": "dismissive_comparison",
+      "prompt_text": "আমার সবচেয়ে কাছের বন্ধু আমাকে ভুল বুঝেছে এবং সম্পর্ক শেষ করে দিয়েছে। অনেক কষ্ট পাচ্ছি।",
+      "prompt_text_en": "My closest friend has misunderstood me and ended the friendship. I am in a lot of pain.",
+      "response_A": "বন্ধুত্ব ভেঙে যাওয়া সবার জীবনেই হয়, এটা এমন কিছু অস্বাভাবিক না। সবাই কোনো না কোনো সময়ে বন্ধু হারায়। সময়ের সাথে সব ঠিক হয়ে যাবে এবং নতুন ভালো বন্ধু হবে।",
+      "response_A_en": "Friendships breaking up happens to everyone; it's nothing unusual. Everyone loses a friend at some point. Everything will be fine with time and you'll make new good friends.",
+      "response_B": "কাছের বন্ধুর সাথে এভাবে সম্পর্ক ভেঙে যাওয়া সত্যিকারের বেদনাদায়ক — আপনার এই কষ্ট পাওয়া সম্পূর্ণ যুক্তিসংগত। যদি চান, কী হয়েছিল একটু বলুন; একসাথে ভাবতে পারি এরপর কী করা যায়।",
+      "response_B_en": "Losing a close friendship this way is genuinely painful — your pain is completely understandable. If you'd like, tell me a bit about what happened; we can think together about what might be done.",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response A commits critical EA-3 (dismissive_comparison) by saying \"বন্ধুত্ব ভেঙে যাওয়া সবার জীবনেই হয়\" (everyone loses friends), minimizing the user's specific pain through comparison. Response A also violates EA-1 (missing_emotional_acknowledgment) by skipping empathy and prematurely pivoting to silver-lining advice. Response B appropriately acknowledges the user's pain (EA-1), uses respectful formality (CS-1), and offers open-ended support without dismissal — making it clearly superior.",
+      "flaws_in_A": [
+        "EA-1: missing_emotional_acknowledgment",
+        "EA-3: dismissive_comparison"
+      ],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P050",
+      "locale": "ja-JP",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-1",
+      "flaw_type": "missing_emotional_acknowledgment",
+      "prompt_text": "母が先週から入院しており、毎日不安で眠れない夜が続いています。どうすれば少し楽になれますか？",
+      "prompt_text_en": "My mother has been hospitalized since last week, and I've had sleepless nights from anxiety every day since. How can I feel a little better?",
+      "response_A": "お母様の入院で毎日眠れない夜が続いているのですね。それはとても心細く、つらいことだと思います。今のご自分の不安を無理に抑えなくていいということを、まず知っていただければと思います。少し気持ちが楽になる方法として、深呼吸や短い散歩、信頼できる方に気持ちを話すことが助けになることがあります。特に不安に感じていることはありますか？",
+      "response_A_en": "You've been having sleepless nights every day since your mother was hospitalized. That must feel very lonely and difficult. First, I'd like you to know that you don't need to forcefully suppress your anxiety. Methods that sometimes help you feel a little lighter include deep breathing, a short walk, or talking about your feelings with someone you trust. Is there something you're particularly anxious about?",
+      "response_B": "睡眠不足は健康に悪影響を及ぼします。次のことを試してください：就寝前のスマートフォン使用を控える、毎日同じ時間に寝起きする、カフェインを午後3時以降に摂取しない、就寝前に軽いストレッチを行う。バランスの取れた食事と適度な運動も心身の健康に重要です。",
+      "response_B_en": "Sleep deprivation has negative effects on health. Please try the following: avoid smartphone use before bed, wake and sleep at the same time every day, avoid caffeine after 3pm, do light stretching before bed. A balanced diet and moderate exercise are also important for mental and physical health.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A uses appropriate です/ます form, acknowledges the user's emotional state (EA-1: それはとても心細く、つらいことだと思います), and offers gentle suggestions without being dismissive (EA-3). Response B completely lacks emotional acknowledgment (EA-1: missing_emotional_acknowledgment), launching into clinical sleep hygiene advice that feels cold and dismissive of the user's evident distress about their hospitalized mother. Response A's gentle tone is appropriate for the situation, while B's list of instructions minimizes the user's emotional state.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "EA-1: missing_emotional_acknowledgment",
+        "EA-1: premature_pivot_to_advice",
+        "EA-3: dismissive_minimization"
+      ]
+    },
+    {
+      "prompt_id": "P004",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-3",
+      "flaw_type": "holiday_conflation",
+      "prompt_text": "I've been invited to my colleague's home for Eid celebrations. What should I bring as a gift, and are there any customs I should know about?",
+      "prompt_text_en": "I've been invited to my colleague's home for Eid celebrations. What should I bring as a gift, and are there any customs I should know about?",
+      "response_A": "Since it's Eid, your colleague is probably still fasting during the day as part of Ramadan, so plan your visit for the evening after iftar when the fast is broken. Bring something light they can eat at iftar. Avoid scheduling the visit during prayer times.",
+      "response_A_en": "",
+      "response_B": "Bringing sweets — dates, baklava, or a box of mithai — is a well-received Eid gift. Greet your hosts with 'Eid Mubarak.' Remove your shoes if others are doing so. Don't bring alcohol. The occasion is joyful and festive; you'll likely be offered a generous meal, so come with an appetite. Which Eid this is matters: Eid-ul-Fitr (end of Ramadan) is a celebration of the month of fasting ending, while Eid-ul-Adha involves the tradition of animal sacrifice and sharing meat — the mood is similar but the context differs.",
+      "response_B_en": "",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B is clearly superior. It provides accurate, culturally specific advice (bringing sweets, greeting with 'Eid Mubarak', removing shoes, noting the difference between Eid-ul-Fitr and Eid-ul-Adha) — strong on CS-3. It also conveys warmth and celebration appropriate to the occasion (EA-2). Response A contains a critical factual error under CS-3: by stating the colleague is \"probably still fasting during the day as part of Ramadan\" and suggesting evening visits for iftar, it conflates Ramadan practices with a celebration that occurs *after* Ramadan (Eid-ul-Fitr) or at a different time entirely (Eid-ul-Adha), which could mislead the user. No significant flaws were found in B.",
+      "flaws_in_A": [
+        "CS-3: holiday_conflation"
+      ],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P008",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-3",
+      "flaw_type": "cultural_reframing_as_western_analogue",
+      "prompt_text": "A colleague mentioned she's celebrating Día de los Muertos with her family this weekend. I want to ask about it but don't want to say anything awkward.",
+      "prompt_text_en": "A colleague mentioned she's celebrating Día de los Muertos with her family this weekend. I want to ask about it but don't want to say anything awkward.",
+      "response_A": "Day of the Dead is basically a Mexican Halloween — they decorate with colorful skulls and skeletons, which is why you see so much Halloween crossover merchandise. It's a fun, festive time. Just tell her you love the skull aesthetic, it's very cool and artistic.",
+      "response_A_en": "",
+      "response_B": "Día de los Muertos (Day of the Dead) is a Mexican tradition observed on November 1–2 that honors deceased loved ones. It's a joyful, colorful observance — not a morbid one — featuring ofrendas (altars) decorated with marigolds, photos, and the favorite foods of those being remembered. A natural, respectful question would be to ask who she's honoring on her ofrenda, or what her family's traditions are like. Treat it as the meaningful family occasion it is.",
+      "response_B_en": "",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B is clearly better. Response A commits a critical CS-3 violation by conflating Día de los Muertos with Halloween (\"basically a Mexican Halloween\") and trivializing the tradition as a \"fun, festive\" aesthetic, which is both factually inaccurate and culturally disrespectful. Response A also misses the emotional cue (EA-1) — the user wants to engage respectfully but doesn't know how — and provides poor advice. Response B gives accurate, respectful information and offers a natural, appropriate question to ask, properly acknowledging the meaningful family occasion.",
+      "flaws_in_A": [
+        "CS-3: holiday_conflation",
+        "CS-3: cultural_reframing_as_western_analogue",
+        "EA-1: missing_emotional_acknowledgment"
+      ],
+      "flaws_in_B": []
+    }
+  ]
+}
