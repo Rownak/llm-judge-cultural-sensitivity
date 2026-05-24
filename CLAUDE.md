@@ -1,0 +1,1 @@
+This project's full spec is in @docs/PROJECT_BRIEF.md. Read it before starting. Key guardrails: all data must be synthetic and self-authored, keep the dataset small and the methodology rigorous.
