@@ -1,11 +1,11 @@
 """
 Prepare dataset for pairwise LLM judge evaluation.
 
-- Load synthetic_prompts.csv
+- Load synthetic_prompts.csv or specified input CSV
 - Create 80/20 dev/test split (stratified by locale)
 - Randomize position A/B for each pair
 - Generate ground-truth labels for test set
-- Output two CSV files: dev_set.csv and test_set.csv
+- Output two CSV files: dev_set{input_stem}.csv and test_set{input_stem}.csv
 """
 
 import csv
@@ -86,12 +86,13 @@ def stratified_split(rows, test_ratio=0.2, seed=42):
     return dev_set, test_set
 
 
-def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42):
+def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42, input_stem=None):
     """
     Prepare dev and test sets with randomized positions and ground truth.
     """
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    input_stem = input_stem or Path(input_csv).stem
 
     # Load
     print(f"Loading {input_csv}...")
@@ -113,7 +114,7 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42):
 
     # Prepare position assignment and write dev set
     print("Preparing dev set with randomized positions...")
-    dev_output = output_dir / "dev_set.csv"
+    dev_output = output_dir / f"dev_set_{input_stem}.csv"
     dev_fieldnames = [
         "prompt_id",
         "locale",
@@ -127,6 +128,7 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42):
         "response_B",
         "response_B_en",
         "flipped",
+        "ground_truth_winner",
     ]
 
     with open(dev_output, "w", encoding="utf-8", newline="") as f:
@@ -147,13 +149,14 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42):
                 "response_B": pos["response_B"],
                 "response_B_en": pos["response_B_en"],
                 "flipped": pos["flipped"],
+                "ground_truth_winner": pos["ground_truth_winner"],
             })
     print(f"  Output: {dev_output}")
 
     # Prepare test set with ground truth
     print("Preparing test set with randomized positions and ground truth...")
-    test_output = output_dir / "test_set.csv"
-    test_fieldnames = dev_fieldnames + ["ground_truth_winner"]
+    test_output = output_dir / f"test_set_{input_stem}.csv"
+    test_fieldnames = dev_fieldnames
 
     with open(test_output, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=test_fieldnames)
@@ -182,8 +185,23 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42):
 
 
 if __name__ == "__main__":
-    input_csv = Path(__file__).parent.parent / "data" / "synthetic_prompts.csv"
-    output_dir = Path(__file__).parent.parent / "data"
+    import argparse
 
-    dev_path, test_path = prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42)
+    parser = argparse.ArgumentParser(description="Prepare dev/test splits for LLM judge evaluation.")
+    parser.add_argument(
+        "input_file",
+        nargs="?",
+        default="synthetic_prompts.csv",
+        help="Input CSV filename inside data/ (default: synthetic_prompts.csv)",
+    )
+    args = parser.parse_args()
+
+    data_dir = Path(__file__).parent.parent / "data"
+    input_csv = data_dir / args.input_file
+
+    if not input_csv.exists():
+        print(f"Error: {input_csv} not found")
+        raise SystemExit(1)
+
+    dev_path, test_path = prepare_dataset(input_csv, output_dir=data_dir, test_ratio=0.2, seed=42)
     print(f"\nOutput files:\n  {dev_path}\n  {test_path}")

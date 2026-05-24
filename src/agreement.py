@@ -1,17 +1,17 @@
 """
 Compute judge-vs-human agreement metrics: raw accuracy + Cohen's kappa + confusion matrix.
 
-Loads judge_results_*.json from results/ folder, compares judge.preferred vs ground_truth_winner.
-Outputs report to stdout and saves to agreement_*.txt in results/ folder.
+Loads judge_*.json from results/ folder, compares judge.preferred vs ground_truth_winner.
+Outputs report to stdout and saves to agr_*.txt in results/ folder.
 
 Usage:
-  python src/agreement.py results/judge_results_claude-haiku-4-5-20251001_v1.0.json
-  python src/agreement.py results/judge_results_v1.0.json
+  python src/agreement.py results/judge_test_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0.json
+  python src/agreement.py results/judge_dev_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0.json
 
 From notebook:
   from src.agreement import run
-  metrics = run("results/judge_results_v1.0.json")
-  # Prints report to stdout + saves to results/agreement_v1.0.txt
+  metrics = run("results/judge_test_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0.json")
+  # Prints report to stdout + saves to results/agr_test_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0.txt
 """
 
 import json
@@ -220,7 +220,7 @@ def save_report(report_text: str, results_path: str) -> Path:
     """
     Save report to a text file in results folder.
 
-    Output filename: agreement_{model_slug}_v{rubric_version}.txt
+    Output filename: agr_{dataset_stem}_{model_slug}_v{rubric_version}.txt
 
     Parameters
     ----------
@@ -235,24 +235,14 @@ def save_report(report_text: str, results_path: str) -> Path:
         Path to saved report file
     """
     results_dir = Path(results_path).parent
-    results_file = Path(results_path).stem  # e.g. "judge_results_v1.0" or "judge_results_claude-haiku-4-5-20251001_v1.0"
+    results_file = Path(results_path).stem  # e.g. "judge_test_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0"
 
-    # Extract model slug and version from filename
-    # Strategy: remove "judge_results_" prefix, then parse what remains
-    if results_file.startswith("judge_results_"):
-        remainder = results_file[len("judge_results_"):]  # e.g. "v1.0" or "claude-haiku-4-5-20251001_v1.0"
-
-        if "_v" in remainder:
-            # Has model slug: "claude-haiku-4-5-20251001_v1.0"
-            parts = remainder.rsplit("_v", 1)
-            model_slug = parts[0]
-            version = parts[1]
-            output_filename = f"agreement_{model_slug}_v{version}.txt"
-        else:
-            # No model slug: "v1.0"
-            output_filename = f"agreement_{remainder}.txt"
+    # Extract remainder after "judge_" prefix, then mirror into agr_ filename
+    if results_file.startswith("judge_"):
+        remainder = results_file[len("judge_"):]  # e.g. "test_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0"
+        output_filename = f"agr_{remainder}.txt"
     else:
-        output_filename = "agreement.txt"
+        output_filename = "agr.txt"
 
     output_path = results_dir / output_filename
 

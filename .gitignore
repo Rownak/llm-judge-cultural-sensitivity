@@ -50,6 +50,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+test/
 
 # Translations
 *.mo
@@ -216,3 +217,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Agentic Workflow files
+.claude/
+.vscode/
+src/create_dataset.py
