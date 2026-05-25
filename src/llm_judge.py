@@ -1,7 +1,7 @@
 """
 LLM-as-Judge: Pairwise evaluation using Claude or DeepSeek with structured output.
 
-Loads any dev/test CSV, runs judge_prompt_v1 against each pair, saves results
+Loads any dev/test CSV, runs judge_prompt against each pair, saves results
 to results/judge_{dataset_stem}_{model_slug}_v{rubric_version}.json.
 
 Supported models
@@ -11,14 +11,22 @@ Supported models
   deepseek  : deepseek-chat
               deepseek-reasoner
 
+Judge prompt versions (--judge-version)
+---------------------------------------
+  v0 : Simple (no rubric, just cultural sensitivity & emotional appropriateness)
+  v1 : Medium (rubric v1 with 7 dimensions, simplified flaws)
+  v2 : Advanced (rubric v2 with applicability checks, score anchors)
+
 Usage:
-  python src/llm_judge.py                          # Claude Haiku (default)
-  python src/llm_judge.py --model deepseek-chat    # DeepSeek Chat
+  python src/llm_judge.py                                    # Claude Haiku + v1 (default)
+  python src/llm_judge.py --model deepseek-chat               # DeepSeek Chat + v1
+  python src/llm_judge.py --judge-version v0                 # Claude Haiku + v0
+  python src/llm_judge.py --judge-version v2 --model deepseek-chat
 
 From notebook:
   from src.llm_judge import run_pairwise_judge
-  results = run_pairwise_judge("data/test_set.csv", model="claude-haiku-4-5-20251001")
-  results = run_pairwise_judge("data/test_set.csv", model="deepseek-chat")
+  results = run_pairwise_judge("data/test_set_subtle_synthetic_prompts.csv", model="claude-haiku-4-5-20251001")
+  results = run_pairwise_judge("data/test_set_subtle_synthetic_prompts.csv", judge_version="v0", model="deepseek-chat")
 """
 
 import csv
@@ -33,11 +41,32 @@ from pydantic import BaseModel
 
 
 # ---------------------------------------------------------------------------
-# Load judge prompt builder
+# Dynamic judge prompt loader
 # ---------------------------------------------------------------------------
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "prompts"))
-from judge_prompt_v1 import build_pairwise_prompt, RUBRIC_VERSION
+def _load_judge_prompt(judge_version: str = "v1"):
+    """
+    Dynamically import the appropriate judge prompt module.
+
+    Returns
+    -------
+    tuple of (build_pairwise_prompt function, RUBRIC_VERSION string)
+    """
+    sys.path.insert(0, str(Path(__file__).parent.parent / "prompts"))
+
+    if judge_version == "v0":
+        from judge_prompt_v0 import build_pairwise_prompt, RUBRIC_VERSION
+    elif judge_version == "v1":
+        from judge_prompt_v1 import build_pairwise_prompt, RUBRIC_VERSION
+    elif judge_version == "v2":
+        from judge_prompt_v2 import build_pairwise_prompt, RUBRIC_VERSION
+    else:
+        raise ValueError(f"Unknown judge version '{judge_version}'. Supported: v0, v1, v2")
+
+    return build_pairwise_prompt, RUBRIC_VERSION
+
+
+build_pairwise_prompt, RUBRIC_VERSION = _load_judge_prompt()
 
 
 # ---------------------------------------------------------------------------
@@ -189,21 +218,22 @@ def _call_deepseek(client, model: str, judge_prompt: str) -> JudgeOutput:
 # Core judge function
 # ---------------------------------------------------------------------------
 
-def run_judge(row: dict, client, model: str) -> dict:
+def run_judge(row: dict, client, model: str, build_pairwise_prompt_fn) -> dict:
     """
     Run judge on a single pair.
 
     Parameters
     ----------
-    row    : dict from test_set.csv (prompt_id, locale, prompt_text, response_A, response_B, ...)
-    client : initialized API client (Anthropic or OpenAI)
-    model  : model name string
+    row                      : dict from test_set.csv (prompt_id, locale, prompt_text, response_A, response_B, ...)
+    client                   : initialized API client (Anthropic or OpenAI)
+    model                    : model name string
+    build_pairwise_prompt_fn : the build_pairwise_prompt function from the selected judge prompt module
 
     Returns
     -------
     dict — input row merged with judge output fields
     """
-    judge_prompt = build_pairwise_prompt(
+    judge_prompt = build_pairwise_prompt_fn(
         row["locale"], row["prompt_text"], row["response_A"], row["response_B"]
     )
 
@@ -225,6 +255,7 @@ def run_judge(row: dict, client, model: str) -> dict:
 def run_pairwise_judge(
     csv_path: str,
     model: str = DEFAULT_MODEL,
+    judge_version: str = "v1",
     output_path: str | None = None,
 ) -> list[dict]:
     """
@@ -232,10 +263,11 @@ def run_pairwise_judge(
 
     Parameters
     ----------
-    csv_path    : path to test_set.csv (or dev_set.csv)
-    model       : model name — selects provider automatically
-    output_path : output JSON path; defaults to
-                  results/judge_results_{model_slug}_v{RUBRIC_VERSION}.json
+    csv_path       : path to test_set.csv (or dev_set.csv)
+    model          : model name — selects provider automatically
+    judge_version  : judge prompt version ("v0", "v1", "v2"); defaults to "v1"
+    output_path    : output JSON path; defaults to
+                     results/judge_{dataset_stem}_{model_slug}_v{judge_version}.json
 
     Returns
     -------
@@ -243,14 +275,16 @@ def run_pairwise_judge(
     """
     load_dotenv()
     client = _build_client(model)
+    build_pairwise_prompt_fn, rubric_version = _load_judge_prompt(judge_version)
 
     csv_path = Path(csv_path)
     with open(csv_path, encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f, skipinitialspace=True))
 
-    print(f"Model    : {model}")
-    print(f"Provider : {_provider(model)}")
-    print(f"Dataset  : {csv_path} ({len(rows)} rows)")
+    print(f"Judge Version: {judge_version}")
+    print(f"Model        : {model}")
+    print(f"Provider     : {_provider(model)}")
+    print(f"Dataset      : {csv_path} ({len(rows)} rows)")
     print()
 
     results = []
@@ -258,25 +292,26 @@ def run_pairwise_judge(
         prompt_id = row.get("prompt_id", f"row_{i}")
         print(f"  [{i}/{len(rows)}] {prompt_id} ...", end=" ", flush=True)
         try:
-            result = run_judge(row, client, model)
+            result = run_judge(row, client, model, build_pairwise_prompt_fn)
             results.append(result)
             print("done")
         except Exception as e:
             print(f"ERROR: {e}")
             raise
 
-    # Build output path: results/judge_{dataset_stem}_{model_slug}_v{rubric_version}.json
+    # Build output path: results/judge_{dataset_stem}_{model_slug}_v{judge_version}.json
     if output_path is None:
         results_dir = Path(__file__).parent.parent / "results"
         results_dir.mkdir(parents=True, exist_ok=True)
         dataset_stem = Path(csv_path).stem   # e.g. "test_set_synthetic_prompts"
         model_slug = model.replace("/", "-")
-        output_path = results_dir / f"judge_{dataset_stem}_{model_slug}_v{RUBRIC_VERSION}.json"
+        output_path = results_dir / f"judge_{dataset_stem}_{model_slug}_v{judge_version}.json"
     else:
         output_path = Path(output_path)
 
     output_data = {
-        "rubric_version": RUBRIC_VERSION,
+        "judge_version": judge_version,
+        "rubric_version": rubric_version,
         "model": model,
         "n_evaluated": len(results),
         "results": results,
@@ -303,18 +338,22 @@ if __name__ == "__main__":
         help=f"Model name (default: {DEFAULT_MODEL})"
     )
     parser.add_argument(
+        "--judge-version", default="v1", choices=["v0", "v1", "v2"],
+        help="Judge prompt version (default: v1)"
+    )
+    parser.add_argument(
         "--input", default=None,
-        help="Path to input CSV (default: data/test_set.csv)"
+        help="Path to input CSV (default: data/test_set_subtle_synthetic_prompts.csv)"
     )
     args = parser.parse_args()
 
-    input_path = args.input or str(Path(__file__).parent.parent / "data" / "test_set.csv")
+    input_path = args.input or str(Path(__file__).parent.parent / "data" / "test_set_subtle_synthetic_prompts.csv")
 
     print("=" * 60)
     print("LLM-as-Judge: Pairwise Evaluation")
     print("=" * 60)
 
-    results = run_pairwise_judge(input_path, model=args.model)
+    results = run_pairwise_judge(input_path, model=args.model, judge_version=args.judge_version)
 
     print()
     print("=" * 60)

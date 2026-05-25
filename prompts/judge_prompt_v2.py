@@ -375,17 +375,17 @@ if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding="utf-8")
 
-    sample_locale = "ja-JP"
+    sample_locale = "en-US"
     sample_prompt = (
-        "上司にまた同じミスを指摘されました。毎回同じことを言われて、もう嫌になってきました。"
+        "My boss pointed out the same mistake again. Every time it's the same feedback and I'm getting frustrated."
     )
     sample_a = (
-        "それは本当につらいですね。同じことを繰り返し指摘されると、"
-        "認められていないと感じてしまうのは自然なことだと思います。"
+        "That sounds really frustrating. When you receive repeated feedback on the same issue, it's natural to feel discouraged. "
+        "Your feelings are valid, and many people experience this."
     )
     sample_b = (
-        "上司がご指摘してくださるのは、あなたの成長を期待しているからだと思います。"
-        "前向きに捉えて、ミスをなくせるよう努力しましょう！"
+        "Your boss is giving you this feedback because they see potential in you and want you to grow. "
+        "Try to view it positively and work harder to eliminate these mistakes!"
     )
 
     print("=" * 70)

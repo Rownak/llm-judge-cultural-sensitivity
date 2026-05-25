@@ -277,17 +277,16 @@ if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding="utf-8")
 
-    sample_locale = "bn-BD"
+    sample_locale = "en-US"
     sample_prompt = (
-        "গত সপ্তাহে আমার বাবা মারা গেছেন। এখন কীভাবে মানসিকভাবে সামলাব?"
+        "My father passed away last week. How do I cope with this mentally and emotionally?"
     )
     sample_a = (
-        "আপনার বাবার মৃত্যুর জন্য আমি অত্যন্ত দুঃখিত। "
-        "এত বড় একটি ক্ষতির পর মানসিকভাবে ভেঙে পড়া স্বাভাবিক।"
+        "I'm deeply sorry for your loss. It's completely natural to feel overwhelmed after such a profound loss. "
+        "Please be gentle with yourself during this time."
     )
     sample_b = (
-        "মানসিক সুস্থতার জন্য নিম্নলিখিত পদক্ষেপ নিন: "
-        "১. প্রতিদিন ব্যায়াম করুন। ২. পর্যাপ্ত ঘুমান।"
+        "Here are some steps for mental wellness: 1. Exercise daily. 2. Get enough sleep. 3. Stay busy with activities."
     )
 
     print("=" * 70)
