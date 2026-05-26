@@ -181,4 +181,5 @@ The pairwise preference judgments this pipeline produces are exactly the form of
 - **Single non-native annotator** — real evaluation needs native speakers per locale.
 - **Synthetic data** — no real-world distribution; useful for methodology demonstration only.
 - **Locale coverage** — currently English + Spanish; the rubric and pipeline are locale-agnostic but require new prompts/responses to extend.
+- **Prompt for Locale** - Prompt are english in this project. For multilingual, better to have prompt base on language.
 - **Single judge per run** — no ensembling or self-consistency yet.
