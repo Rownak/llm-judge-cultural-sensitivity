@@ -1,0 +1,71 @@
+
+====================================================================
+Positional Bias Evaluation Report
+====================================================================
+
+Model          : HuggingFaceTB/SmolLM3-3B
+Rubric version : 0.0
+Judge version  : v0
+N evaluated    : 75
+N skipped      : 5
+
+--------------------------------------------------------------------
+Overall Bias Summary
+--------------------------------------------------------------------
+  Complete pairs         : 35
+  Incomplete pairs       : 5  ['P124', 'P119', 'P132', 'P133', 'P105']
+
+  Biased pairs           : 23 / 35   (bias rate: 0.657)
+  Consistent (always A)  : 20   (0.571)
+  Consistent (always B)  : 3   (0.086)
+  Correct on BOTH legs   : 3   (0.086)
+
+--------------------------------------------------------------------
+Accuracy by Position  (preferred == ground_truth_winner)
+--------------------------------------------------------------------
+  original   :  13 /  35   accuracy: 0.371
+  flipped    :  16 /  35   accuracy: 0.457
+
+--------------------------------------------------------------------
+Breakdown by Locale
+--------------------------------------------------------------------
+  locale  pairs  biased   bias%  acc_orig  acc_flip
+  ------  -----  ------  ------  --------  --------
+  en-US      17      12   0.706     0.471     0.471
+  es-ES      18      11   0.611     0.278     0.444
+
+--------------------------------------------------------------------
+Breakdown by Scenario Type
+--------------------------------------------------------------------
+  scenario_type  pairs  biased   bias%  acc_orig  acc_flip
+  -------------  -----  ------  ------  --------  --------
+  cultural          18      12   0.667     0.333     0.444
+  emotional         17      11   0.647     0.412     0.471
+
+--------------------------------------------------------------------
+Breakdown by Primary Criterion
+--------------------------------------------------------------------
+  criterion  pairs  biased   bias%  acc_orig  acc_flip
+  ---------  -----  ------  ------  --------  --------
+  CS-1           5       4   0.800     0.600     0.600
+  CS-2           5       4   0.800     0.600     0.200
+  CS-3           5       2   0.400     0.000     0.400
+  CS-4           3       2   0.667     0.000     0.667
+  EA-1           3       0   0.000     0.333     0.333
+  EA-2           8       7   0.875     0.375     0.500
+  EA-3           6       4   0.667     0.500     0.500
+
+--------------------------------------------------------------------
+
+
+--------------------------------------------------------------------
+Notes
+--------------------------------------------------------------------
+  bias%     : fraction of pairs where the judge's underlying
+              choice changed when positions were swapped.
+  acc_orig  : accuracy on the original-order leg.
+  acc_flip  : accuracy on the flipped-order leg.
+  A high bias% with acc_orig >> acc_flip (or vice versa)
+  indicates the judge systematically favours one position.
+
+====================================================================
