@@ -4,9 +4,11 @@ A small, end-to-end prototype for **measuring cultural sensitivity and emotional
 
 > The point of this project is not the dataset. It is the **methodology**: take a vague quality ("cultural sensitivity"), decompose it into a rubric, build a judge, and then *prove* the judge is trustworthy before believing any number it produces.
 
+> **Built with Claude Code.** Every coding plan and code change was reviewed before committing — Claude Code did the typing, the design decisions and the verification were by Ahnaf Farhan.
+
 ---
 
-## Why this exists
+## Objectives
 
 Conversational AI serving a global user base regularly produces responses that miss the mark culturally or emotionally — wrong register, stereotyping, tone-deaf replies, mishandled holidays or names. These qualities are subjective and hard to measure, yet teams need reliable metrics to decide what is safe to launch and where to improve.
 
@@ -89,7 +91,7 @@ Create a `.env` file in the project root (already in `.gitignore`):
 
 ```
 ANTHROPIC_API_KEY=sk-ant-your-key-here
-DEEPSEEK_API_KEY=sk-your-deepseek-key-here   # optional
+DEEPSEEK_API_KEY=sk-your-deepseek-key-here   
 ```
 
 The local SmolLM3-3B judge ([src/llm_judge_small.py](src/llm_judge_small.py)) requires no API key — only a local GPU/CPU and the HuggingFace model cache.
@@ -138,6 +140,19 @@ Saves a per-dimension breakdown of judge mistakes to `results/defects_dev_set_en
 python src/flip_bias_evaluation.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.json
 ```
 Saves the bias report to `results/posbias_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.txt`. A high `bias%` or a strong always-A / always-B pattern is the signal to iterate on the judge prompt (see [prompts/judge_prompt_v0_1.py](prompts/judge_prompt_v0_1.py) for an example mitigation).
+
+---
+
+## Findings (SmolLM3-3B on `dev_set_eng_spanish_pos_bias`)
+
+| Judge prompt | Bias rate | Always-A | Always-B | Correct on both legs |
+|---|---:|---:|---:|---:|
+| `v0` (no anti-bias instruction)  | 0.657 | 0.571 | 0.086 | 0.086 |
+| `v0.1` (anti-bias instruction)   | 0.632 | 0.553 | 0.079 | 0.237 |
+
+The small SmolLM3-3B judge has a strong **first-position bias**: it picks response A in over half of all pairs regardless of content. Adding an explicit "do not favour a response based on position" instruction to the prompt (`v0.1`) barely moves the bias rate (0.657 → 0.632) or the always-A rate (0.571 → 0.553) — **prompt instruction alone is not enough to mitigate positional bias in a small model**, even though both-legs-correct does rise from 8.6% to 23.7%.
+
+**Next step:** instead of relying on the prompt, evaluate every pair in both orderings and aggregate — e.g. take the judge's verdict only when it agrees with itself across positions, or score using a position-averaged preference. That turns positional bias from a confound into something the pipeline neutralises automatically.
 
 ---
 
