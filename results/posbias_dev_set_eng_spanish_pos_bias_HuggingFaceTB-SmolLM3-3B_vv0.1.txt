@@ -1,0 +1,97 @@
+
+====================================================================
+Positional Bias Evaluation Report
+====================================================================
+
+Model          : HuggingFaceTB/SmolLM3-3B
+Rubric version : 0.1
+Judge version  : v0.1
+N evaluated    : 77
+N skipped      : 3
+
+--------------------------------------------------------------------
+Overall Bias Summary
+--------------------------------------------------------------------
+  Complete pairs         : 38
+  Incomplete pairs       : 1  ['P132']
+
+  Biased pairs           : 24 / 38   (bias rate: 0.632)
+  Consistent (always A)  : 21   (0.553)
+  Consistent (always B)  : 3   (0.079)
+  Correct on BOTH legs   : 9   (0.237)
+
+--------------------------------------------------------------------
+Accuracy by Position  (preferred == ground_truth_winner)
+--------------------------------------------------------------------
+  original   :  17 /  38   accuracy: 0.447
+  flipped    :  25 /  38   accuracy: 0.658
+
+--------------------------------------------------------------------
+Breakdown by Locale
+--------------------------------------------------------------------
+  locale  pairs  biased   bias%  acc_orig  acc_flip
+  ------  -----  ------  ------  --------  --------
+  en-US      19      13   0.684     0.421     0.789
+  es-ES      19      11   0.579     0.474     0.526
+
+--------------------------------------------------------------------
+Breakdown by Scenario Type
+--------------------------------------------------------------------
+  scenario_type  pairs  biased   bias%  acc_orig  acc_flip
+  -------------  -----  ------  ------  --------  --------
+  cultural          20      16   0.800     0.300     0.700
+  emotional         18       8   0.444     0.611     0.611
+
+--------------------------------------------------------------------
+Breakdown by Primary Criterion
+--------------------------------------------------------------------
+  criterion  pairs  biased   bias%  acc_orig  acc_flip
+  ---------  -----  ------  ------  --------  --------
+  CS-1           7       3   0.429     0.286     0.714
+  CS-2           4       4   1.000     0.750     0.250
+  CS-3           5       5   1.000     0.200     0.800
+  CS-4           4       4   1.000     0.000     1.000
+  EA-1           3       3   1.000     0.333     0.667
+  EA-2           8       4   0.500     0.750     0.750
+  EA-3           7       1   0.143     0.571     0.429
+
+--------------------------------------------------------------------
+Breakdown by Flaw Type
+--------------------------------------------------------------------
+  flaw_type                            pairs  biased   bias%  acc_orig  acc_flip
+  -----------------------------------  -----  ------  ------  --------  --------
+  premature_pivot_to_solution              2       2   1.000     0.000     1.000
+  festival_overgeneralization              2       2   1.000     0.000     1.000
+  positive_stereotype_professionalism      2       2   1.000     0.500     0.500
+  assumes_religious_practice               2       2   1.000     0.000     1.000
+  food_assumption                          2       2   1.000     0.500     0.500
+  overly_bright_tone                       2       2   1.000     0.500     0.500
+  register_mixed_formal_casual             2       1   0.500     0.000     0.500
+  tone_slightly_overly_practical           2       1   0.500     1.000     0.500
+  register_too_formal                      2       1   0.500     0.000     0.500
+  informal_address_in_formal_context       2       1   0.500     0.500     1.000
+  tone_slightly_clinical                   2       1   0.500     0.500     1.000
+  faint_silver_lining                      2       1   0.500     1.000     0.500
+  generic_empathy                          1       1   1.000     1.000     0.000
+  assumes_language_need                    1       1   1.000     0.000     1.000
+  mild_group_generalization                1       1   1.000     1.000     0.000
+  minor_cultural_inaccuracy                1       1   1.000     0.000     1.000
+  unwarranted_family_assumption            1       1   1.000     0.000     1.000
+  age_based_overgeneralization             1       1   1.000     1.000     0.000
+  subtle_minimization                      2       0   0.000     0.500     0.500
+  soft_dismissive_comparison               2       0   0.000     0.000     0.000
+  tone_overly_detached                     2       0   0.000     1.000     1.000
+  register_too_casual                      1       0   0.000     1.000     1.000
+  subtle_blame_shift                       1       0   0.000     1.000     1.000
+
+--------------------------------------------------------------------
+Notes
+--------------------------------------------------------------------
+  bias%     : fraction of pairs where the judge's underlying
+              choice changed when positions were swapped.
+  acc_orig  : accuracy on the original-order leg.
+  acc_flip  : accuracy on the flipped-order leg.
+  A high bias% with acc_orig >> acc_flip (or vice versa)
+  indicates the judge systematically favours one position.
+
+====================================================================

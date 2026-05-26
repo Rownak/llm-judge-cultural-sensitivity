@@ -79,13 +79,16 @@ def _load_judge_prompt(judge_version: str = "v0"):
 
     if judge_version == "v0":
         from judge_prompt_v0 import build_pairwise_prompt, RUBRIC_VERSION
+    elif judge_version == "v0.1":
+        from judge_prompt_v0_1 import build_pairwise_prompt, RUBRIC_VERSION
+        
     elif judge_version == "v1":
         from judge_prompt_v1 import build_pairwise_prompt, RUBRIC_VERSION
     elif judge_version == "v2":
         from judge_prompt_v2 import build_pairwise_prompt, RUBRIC_VERSION
     else:
         raise ValueError(f"Unknown judge version '{judge_version}'. Supported: v0, v1, v2")
-
+    print("PROMPTVERSION ", judge_version)
     return build_pairwise_prompt, RUBRIC_VERSION
 
 
@@ -438,7 +441,7 @@ if __name__ == "__main__":
         help=f"HuggingFace model repo ID (default: {DEFAULT_MODEL})"
     )
     parser.add_argument(
-        "--judge-version", default="v1", choices=["v0", "v1", "v2"],
+        "--judge-version", default="v0", choices=["v0","v0.1", "v1", "v2"],
         help="Judge prompt version (default: v1)"
     )
     parser.add_argument(
