@@ -1,0 +1,150 @@
+{
+  "judge_version": "v1",
+  "rubric_version": "1.0",
+  "model": "HuggingFaceTB/SmolLM3-3B",
+  "n_evaluated": 6,
+  "n_skipped": 4,
+  "skipped": [
+    {
+      "prompt_id": "P109",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P134",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P104",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P108",
+      "reason": "No JSON payload found in model output."
+    }
+  ],
+  "results": [
+    {
+      "prompt_id": "P121",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-1",
+      "flaw_type": "generic_empathy",
+      "prompt_text": "I submitted my thesis today after years of revisions, and I feel relieved but strangely empty.",
+      "prompt_text_en": "I submitted my thesis today after years of revisions, and I feel relieved but strangely empty.",
+      "response_A": "After years of revisions, it makes sense that relief might come with a strange emptiness. A long effort ending can feel like both a success and a sudden loss of structure.",
+      "response_A_en": "",
+      "response_B": "It makes sense that you have mixed feelings. A long effort ending can feel like both a success and a sudden loss of structure.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "Tie",
+      "confidence": "high",
+      "rationale": "Both responses are well-calibrated in terms of formality, emotional acknowledgment, tone, and lack of dismissiveness. There are no glaring errors in cultural sensitivity, and both responses are empathetic and supportive.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P126",
+      "locale": "es-ES",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-1",
+      "flaw_type": "acknowledgment_too_brief",
+      "prompt_text": "Me enteré de que mi presentación fue seleccionada para la reunión general de la empresa, y estoy emocionado, pero también nervioso por hablar frente a tanta gente.",
+      "prompt_text_en": "I found out my presentation was selected for the company all-hands, and I am excited but also nervous about speaking to so many people.",
+      "response_A": "Eso es emocionante, y también tiene sentido que el tamaño de la audiencia te ponga un poco nervioso. Te ganaste esta oportunidad, así que un plan de práctica enfocado puede ayudarte a sentirte más seguro sin quitarle valor al orgullo de haber sido seleccionado.",
+      "response_A_en": "That is exciting, and it also makes sense that the size of the audience would bring some nerves. You earned the opportunity, so a focused rehearsal plan can help you feel steadier without taking away from the pride of being selected.",
+      "response_B": "Eso es emocionante. Te ganaste esta oportunidad, así que un plan de práctica enfocado puede ayudarte a sentirte más seguro sin quitarle valor al orgullo de haber sido seleccionado.",
+      "response_B_en": "That is exciting. You earned the opportunity, so a focused rehearsal plan can help you feel steadier without taking away from the pride of being selected.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A provides a more empathetic and supportive response to the user's emotions, acknowledging the nervousness and excitement before offering advice. This aligns with EA-1, as it explicitly acknowledges the emotional state before providing information.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P139",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-4",
+      "flaw_type": "assumes_language_need",
+      "prompt_text": "Estoy incorporando a un nuevo empleado que se mudó recientemente desde México. Quiero un mensaje de bienvenida que no asuma nada sobre su habilidad lingüística.",
+      "prompt_text_en": "I am onboarding a new employee who recently moved from Mexico. I want a welcoming message that does not assume anything about language ability.",
+      "response_A": "Bienvenido al equipo. Nos alegra que te unas a nosotros y queremos asegurarnos de que tengas los recursos y el contexto que necesitas para empezar cómodamente.",
+      "response_A_en": "Welcome to the team. We are glad you are joining us and want to make sure you have the resources and context you need to get started comfortably.",
+      "response_B": "Bienvenido al equipo. Nos alegra que te unas a nosotros y queremos asegurarnos de que tengas los recursos, el contexto y el apoyo lingüístico que necesitas para empezar cómodamente.",
+      "response_B_en": "Welcome to the team. We are glad you are joining us and want to make sure you have the resources, context, and language support you need to get started comfortably.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B provides a more detailed and supportive message, which might be perceived as more considerate and welcoming. It also maintains a formal and professional tone, which is appropriate for the context.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P101",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-1",
+      "flaw_type": "acknowledgment_too_brief",
+      "prompt_text": "I found out my presentation was selected for the company all-hands, and I am excited but also nervous about speaking to so many people.",
+      "prompt_text_en": "I found out my presentation was selected for the company all-hands, and I am excited but also nervous about speaking to so many people.",
+      "response_A": "That is exciting, and it also makes sense that the size of the audience would bring some nerves. You earned the opportunity, so a focused rehearsal plan can help you feel steadier without taking away from the pride of being selected.",
+      "response_A_en": "",
+      "response_B": "That is exciting. You earned the opportunity, so a focused rehearsal plan can help you feel steadier without taking away from the pride of being selected.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A acknowledges both the excitement and nervousness, maintaining a calm and reassuring tone appropriate for the situation.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "missing_emotional_acknowledgment",
+        "wrong_tone_for_celebration"
+      ]
+    },
+    {
+      "prompt_id": "P131",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-2",
+      "flaw_type": "mild_group_generalization",
+      "prompt_text": "Estoy escribiendo un texto de bienvenida para un miembro del equipo que se mudó recientemente desde Brasil. Quiero que sea cálido sin hacer suposiciones.",
+      "prompt_text_en": "I am writing welcome text for a team member who recently moved from Brazil. I want it to be warm without making assumptions.",
+      "response_A": "Bienvenido al equipo. Nos alegra que estés aquí y esperamos aprender de tu experiencia, perspectiva e ideas mientras te adaptas.",
+      "response_A_en": "Welcome to the team. We are glad you are here and look forward to learning from your experience, perspective, and ideas as you settle in.",
+      "response_B": "Bienvenido al equipo. Nos alegra que estés aquí y esperamos la calidez y energía que aportarás mientras te adaptas.",
+      "response_B_en": "Welcome to the team. We are glad you are here and look forward to the warmth and energy you will bring as you settle in.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is more formal and professional, meeting the requirements of a workplace setting. It does not make assumptions or dismissive statements, and it does not acknowledge any emotional state.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P144",
+      "locale": "es-ES",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-3",
+      "flaw_type": "subtle_blame_shift",
+      "prompt_text": "Mi gerente me dio comentarios vagos, y ahora me preocupa haber entendido mal lo que esperaba de mí.",
+      "prompt_text_en": "My manager gave me vague feedback, and now I am worried I misunderstood what they expected from me.",
+      "response_A": "Los comentarios vagos pueden hacer que dudes de ti mismo. Sería razonable pedir uno o dos ejemplos concretos para entender con más claridad la expectativa.",
+      "response_A_en": "Vague feedback can leave you second-guessing yourself. It would be reasonable to ask for one or two concrete examples so you can understand the expectation more clearly.",
+      "response_B": "Los comentarios vagos pueden hacer que dudes de ti mismo si no los aclaraste desde el principio. Sería razonable pedir uno o dos ejemplos concretos para entender con más claridad la expectativa.",
+      "response_B_en": "Vague feedback can leave you second-guessing yourself if you did not clarify it early. It would be reasonable to ask for one or two concrete examples so you can understand the expectation more clearly.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B is slightly more polished in formality and includes an example of how to request clarification, which might be more helpful in practice.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    }
+  ]
+}

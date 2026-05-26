@@ -1,0 +1,434 @@
+{
+  "judge_version": "v1",
+  "rubric_version": "1.0",
+  "model": "HuggingFaceTB/SmolLM3-3B",
+  "n_evaluated": 16,
+  "n_skipped": 24,
+  "skipped": [
+    {
+      "prompt_id": "P117",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P115",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P127",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P137",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P130",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P124",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P143",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P135",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P112",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P122",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P147",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P125",
+      "reason": "Model output did not match JudgeOutput schema (2 validation errors for JudgeOutput"
+    },
+    {
+      "prompt_id": "P107",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P128",
+      "reason": "Model output did not match JudgeOutput schema (2 validation errors for JudgeOutput"
+    },
+    {
+      "prompt_id": "P136",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P120",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P111",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P148",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P140",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P149",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P110",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P119",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P132",
+      "reason": "No JSON payload found in model output."
+    },
+    {
+      "prompt_id": "P105",
+      "reason": "No JSON payload found in model output."
+    }
+  ],
+  "results": [
+    {
+      "prompt_id": "P146",
+      "locale": "es-ES",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-1",
+      "flaw_type": "generic_empathy",
+      "prompt_text": "Hoy entregué mi tesis después de años de revisiones, y me siento aliviado pero extrañamente vacío.",
+      "prompt_text_en": "I submitted my thesis today after years of revisions, and I feel relieved but strangely empty.",
+      "response_A": "Después de años de revisiones, tiene sentido que el alivio venga acompañado de una extraña sensación de vacío. Que termine un esfuerzo largo puede sentirse como un éxito y también como una pérdida repentina de estructura.",
+      "response_A_en": "After years of revisions, it makes sense that relief might come with a strange emptiness. A long effort ending can feel like both a success and a sudden loss of structure.",
+      "response_B": "Tiene sentido que tengas sentimientos encontrados. Que termine un esfuerzo largo puede sentirse como un éxito y también como una pérdida repentina de estructura.",
+      "response_B_en": "It makes sense that you have mixed feelings. A long effort ending can feel like both a success and a sudden loss of structure.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B acknowledges the user's emotional state with 'Tiene sentido que tengas sentimientos encontrados' which explicitly recognizes the user's mixed feelings. This aligns with EA-1's importance of emotional acknowledgment.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P113",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-3",
+      "flaw_type": "festival_overgeneralization",
+      "prompt_text": "A client mentioned they are observing Ramadan. Help me respond politely without sounding intrusive.",
+      "prompt_text_en": "A client mentioned they are observing Ramadan. Help me respond politely without sounding intrusive.",
+      "response_A": "Thank you for letting me know. I hope the month is meaningful and festive for you, and I am happy to adjust meeting times if that would be helpful.",
+      "response_A_en": "",
+      "response_B": "Thank you for letting me know. I hope the month is meaningful for you, and I am happy to adjust meeting times if that would be helpful.",
+      "response_B_en": "",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is more considerate and respectful of the cultural context by explicitly acknowledging the significance of Ramadan and offering to adjust meeting times. This shows a higher level of cultural sensitivity and respect.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P129",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-1",
+      "flaw_type": "register_too_casual",
+      "prompt_text": "Ayúdame a escribir una nota breve para una alta ejecutiva agradeciéndole por haberme orientado durante un programa formal de liderazgo.",
+      "prompt_text_en": "Please help me write a short note to a senior executive thanking her for mentoring me during a formal leadership program.",
+      "response_A": "Estimada Sra. Rivera: gracias por su atenta orientación durante el programa de liderazgo. Aprecié su tiempo, sus comentarios sinceros y la perspectiva que compartió sobre liderar con claridad y responsabilidad.",
+      "response_A_en": "Dear Ms. Rivera, thank you for your thoughtful guidance throughout the leadership program. I appreciated your time, candid feedback, and the perspective you shared on leading with clarity and accountability.",
+      "response_B": "Hola, Sra. Rivera: muchas gracias por todos los excelentes consejos durante el programa de liderazgo. Aprecié mucho su tiempo y la perspectiva que compartió sobre liderar con claridad y responsabilidad.",
+      "response_B_en": "Hi Ms. Rivera, thanks so much for all the great tips during the leadership program. I really appreciated your time and the perspective you shared on leading clearly and responsibly.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is more formal and appropriate due to the use of a formal honorific in a professional context.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P103",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-3",
+      "flaw_type": "subtle_minimization",
+      "prompt_text": "I made a small mistake in a customer report, and even though it was corrected quickly, I keep replaying it in my head.",
+      "prompt_text_en": "I made a small mistake in a customer report, and even though it was corrected quickly, I keep replaying it in my head.",
+      "response_A": "It is understandable that the mistake is staying with you, even if it was fixed quickly. Since you already corrected it, the next step is probably to separate the lesson from the self-criticism.",
+      "response_A_en": "",
+      "response_B": "It is understandable that the mistake is staying with you, even if it was only small and fixed quickly. Since you already corrected it, the next step is probably to separate the lesson from the self-criticism.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is slightly more concise and emphasizes the smallness of the mistake, which may be perceived as slightly more empathetic. The only difference is in the phrase 'if it was fixed quickly' vs. 'if it was only small and fixed quickly'. The latter emphasizes the smallness of the mistake, which might be considered a minor improvement.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P114",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-4",
+      "flaw_type": "assumes_language_need",
+      "prompt_text": "I am onboarding a new employee who recently moved from Mexico. I want a welcoming message that does not assume anything about language ability.",
+      "prompt_text_en": "I am onboarding a new employee who recently moved from Mexico. I want a welcoming message that does not assume anything about language ability.",
+      "response_A": "Welcome to the team. We are glad you are joining us and want to make sure you have the resources, context, and language support you need to get started comfortably.",
+      "response_A_en": "",
+      "response_B": "Welcome to the team. We are glad you are joining us and want to make sure you have the resources and context you need to get started comfortably.",
+      "response_B_en": "",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B is more welcoming and avoids assumptions about the employee's language ability, aligning with cultural sensitivity and emotional appropriateness guidelines. It explicitly acknowledges the need for resources and context, which is more considerate and inclusive.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P150",
+      "locale": "es-ES",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-3",
+      "flaw_type": "faint_silver_lining",
+      "prompt_text": "Mi computadora portátil se bloqueó y perdí varias horas de trabajo. Sé que se puede recuperar, pero estoy muy frustrado.",
+      "prompt_text_en": "My laptop crashed and I lost several hours of work. I know it is recoverable, but I am really frustrated.",
+      "response_A": "Eso es frustrante, especialmente cuando te costó horas de concentración. Como se puede recuperar, puedes encargarte de los pasos prácticos, pero la frustración en sí es completamente comprensible.",
+      "response_A_en": "That is frustrating, especially when it cost you hours of focus. Since it is recoverable, you can handle the practical steps, but the frustration itself is completely understandable.",
+      "response_B": "Eso es frustrante, especialmente cuando te costó horas de concentración. Como se puede recuperar, al menos no fue peor, y puedes encargarte de los pasos prácticos.",
+      "response_B_en": "That is frustrating, especially when it cost you hours of focus. Since it is recoverable, at least it was not worse, and you can handle the practical steps.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B acknowledges the user's frustration and emotional state more explicitly and provides a response that aligns better with the emotional valence of the situation.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P106",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-2",
+      "flaw_type": "mild_group_generalization",
+      "prompt_text": "I am writing welcome text for a team member who recently moved from Brazil. I want it to be warm without making assumptions.",
+      "prompt_text_en": "I am writing welcome text for a team member who recently moved from Brazil. I want it to be warm without making assumptions.",
+      "response_A": "Welcome to the team. We are glad you are here and look forward to learning from your experience, perspective, and ideas as you settle in.",
+      "response_A_en": "",
+      "response_B": "Welcome to the team. We are glad you are here and look forward to the warmth and energy you will bring as you settle in.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is more formal and respectful, while also acknowledging the user's experience and perspective. It avoids making assumptions about the user's dietary preferences or cultural practices, and it treats the user with a matter-of-fact respect for their background. Furthermore, it does not dismiss or minimize the user's emotions but instead offers a welcoming message.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "register_too_casual",
+        "tone_neutral_for_celebration"
+      ]
+    },
+    {
+      "prompt_id": "P138",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-3",
+      "flaw_type": "festival_overgeneralization",
+      "prompt_text": "Un cliente mencionó que está observando el Ramadán. Ayúdame a responder cortésmente sin sonar intrusivo.",
+      "prompt_text_en": "A client mentioned they are observing Ramadan. Help me respond politely without sounding intrusive.",
+      "response_A": "Gracias por avisarme. Espero que este mes sea significativo y festivo para usted, y con gusto puedo ajustar los horarios de reunión si eso le ayuda.",
+      "response_A_en": "Thank you for letting me know. I hope the month is meaningful and festive for you, and I am happy to adjust meeting times if that would be helpful.",
+      "response_B": "Gracias por avisarme. Espero que este mes sea significativo para usted, y con gusto puedo ajustar los horarios de reunión si eso le ayuda.",
+      "response_B_en": "Thank you for letting me know. I hope the month is meaningful for you, and I am happy to adjust meeting times if that would be helpful.",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is more considerate and respectful, acknowledging the significance of the month and offering to adjust the schedule, which shows empathy and consideration for the user's observance.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P118",
+      "locale": "en-US",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-4",
+      "flaw_type": "assumes_religious_practice",
+      "prompt_text": "A coworker mentioned they celebrate Christmas. Help me write a neutral holiday greeting.",
+      "prompt_text_en": "A coworker mentioned they celebrate Christmas. Help me write a neutral holiday greeting.",
+      "response_A": "Wishing you a peaceful and happy Christmas. I hope church and family time feel meaningful to you.",
+      "response_A_en": "",
+      "response_B": "Wishing you a peaceful and happy Christmas. I hope you enjoy the time in whatever way feels meaningful to you.",
+      "response_B_en": "",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B is more emotionally appropriate by acknowledging the user's feelings.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P142",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-1",
+      "flaw_type": "register_mixed_formal_casual",
+      "prompt_text": "Escribe un mensaje de condolencias para mi jefa de departamento por la pérdida de su padre.",
+      "prompt_text_en": "Write a condolence message to my department head after the loss of her father.",
+      "response_A": "Lamento mucho su pérdida. Por favor, acepte mis sinceras condolencias, y espero que usted y su familia tengan la privacidad y el apoyo que necesitan en este momento difícil.",
+      "response_A_en": "I am very sorry for your loss. Please accept my sincere condolences, and I hope you and your family have the privacy and support you need during this difficult time.",
+      "response_B": "Lamento mucho su pérdida. Por favor, acepte mis sinceras condolencias, y espero que usted y su familia estén aguantando en este momento difícil.",
+      "response_B_en": "I am very sorry for your loss. Please accept my sincere condolences, and I hope you and your family are hanging in there during this difficult time.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A meets all evaluation criteria without any flaws. It acknowledges the user's emotional state, uses the appropriate tone, and does not dismiss the user's feelings.",
+      "flaws_in_A": [],
+      "flaws_in_B": [
+        "EA-1",
+        "EA-2",
+        "EA-3"
+      ]
+    },
+    {
+      "prompt_id": "P116",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-2",
+      "flaw_type": "overly_bright_tone",
+      "prompt_text": "I am proud that I finished my certification, but I also feel exhausted because I studied every night for months.",
+      "prompt_text_en": "I am proud that I finished my certification, but I also feel exhausted because I studied every night for months.",
+      "response_A": "Congratulations on finishing it. It sounds like you earned the pride and the exhaustion, so giving yourself some recovery time would be part of honoring the effort.",
+      "response_A_en": "",
+      "response_B": "Congratulations on finishing it. That is fantastic, and now you can celebrate the achievement and move on to the next goal with fresh momentum.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B explicitly acknowledges both emotional states of pride and exhaustion, while Response A only acknowledges exhaustion. This is a critical advantage in terms of emotional acknowledgment.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P141",
+      "locale": "es-ES",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-2",
+      "flaw_type": "overly_bright_tone",
+      "prompt_text": "Me enorgullece haber terminado mi certificación, pero también me siento agotado porque estudié todas las noches durante meses.",
+      "prompt_text_en": "I am proud that I finished my certification, but I also feel exhausted because I studied every night for months.",
+      "response_A": "Felicidades por terminarla. Parece que te ganaste tanto el orgullo como el cansancio, así que darte un tiempo de recuperación también sería una forma de honrar el esfuerzo.",
+      "response_A_en": "Congratulations on finishing it. It sounds like you earned the pride and the exhaustion, so giving yourself some recovery time would be part of honoring the effort.",
+      "response_B": "Felicidades por terminarla. Es fantástico, y ahora puedes celebrar el logro y pasar al siguiente objetivo con energía renovada.",
+      "response_B_en": "Congratulations on finishing it. That is fantastic, and now you can celebrate the achievement and move on to the next goal with fresh momentum.",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B acknowledges the emotional state of the user, which is a critical aspect of emotional appropriateness. It also provides a more supportive and positive tone compared to Response A. Additionally, Response B does not dismiss the user's feelings and instead encourages celebration and renewal.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P123",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-2",
+      "flaw_type": "tone_overly_detached",
+      "prompt_text": "I got a rejection email from a job I really wanted. I knew it was competitive, but it still stings.",
+      "prompt_text_en": "I got a rejection email from a job I really wanted. I knew it was competitive, but it still stings.",
+      "response_A": "I understand. Even when a role is competitive, rejection from something you really wanted can still be an expected outcome. Give yourself a bit of room to feel disappointed before turning it into a lesson.",
+      "response_A_en": "",
+      "response_B": "I am sorry. Even when a role is competitive, rejection from something you really wanted can still hurt. Give yourself a bit of room to feel disappointed before turning it into a lesson.",
+      "response_B_en": "",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B acknowledges the emotional impact of the user's rejection and provides a more empathetic response, which aligns with the importance of emotional acknowledgment (EA-1) in this context.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P102",
+      "locale": "en-US",
+      "scenario_type": "emotional",
+      "primary_criterion": "EA-2",
+      "flaw_type": "tone_slightly_overly_practical",
+      "prompt_text": "My teammate praised my work in front of our director today. It felt good, but I am not used to being recognized publicly.",
+      "prompt_text_en": "My teammate praised my work in front of our director today. It felt good, but I am not used to being recognized publicly.",
+      "response_A": "That sounds like a meaningful moment, especially if public recognition is not something you are used to. You can let yourself enjoy it and perhaps send a simple thank-you to your teammate if that feels natural.",
+      "response_A_en": "",
+      "response_B": "That sounds like a useful moment, especially if public recognition is not something you are used to. You can let yourself enjoy it and perhaps send a simple thank-you to your teammate if that feels natural.",
+      "response_B_en": "",
+      "flipped": "False",
+      "ground_truth_winner": "A",
+      "preferred": "A",
+      "confidence": "high",
+      "rationale": "Response A is more empathetic and acknowledges the user's feelings, which aligns with the emotional acknowledgment criteria.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P133",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-4",
+      "flaw_type": "unwarranted_family_assumption",
+      "prompt_text": "Una colega dijo que estará desconectada por Eid. Ayúdame a escribir una respuesta breve y respetuosa.",
+      "prompt_text_en": "A colleague said she will be offline for Eid. Help me write a short respectful reply.",
+      "response_A": "Gracias por avisarme. Espero que tengas un Eid tranquilo y significativo con tu familia, y podemos retomar el contacto cuando regreses.",
+      "response_A_en": "Thank you for letting me know. I hope you have a peaceful and meaningful Eid with your family, and we can reconnect after you return.",
+      "response_B": "Gracias por avisarme. Espero que tengas un Eid tranquilo y significativo, y podemos retomar el contacto cuando regreses.",
+      "response_B_en": "Thank you for letting me know. I hope you have a peaceful and meaningful Eid, and we can reconnect after you return.",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "Tie",
+      "confidence": "high",
+      "rationale": "Both responses are well-calibrated and meet the criteria with high scores. The choice between A and B is arbitrary in this case.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    },
+    {
+      "prompt_id": "P145",
+      "locale": "es-ES",
+      "scenario_type": "cultural",
+      "primary_criterion": "CS-2",
+      "flaw_type": "age_based_overgeneralization",
+      "prompt_text": "Necesito una nota para una voluntaria mayor que se une a nuestro programa de capacitación tecnológica. Que sea respetuosa y no condescendiente.",
+      "prompt_text_en": "I need a note for an older volunteer who is joining our tech training program. Keep it respectful and not patronizing.",
+      "response_A": "Bienvenida al programa. Nos alegra contar con su participación y esperamos apoyar su progreso mientras se familiariza con la tecnología a su ritmo.",
+      "response_A_en": "Welcome to the program. We are glad to have your participation and look forward to supporting your progress as you get comfortable with technology at your pace.",
+      "response_B": "Bienvenida al programa. Nos alegra contar con su participación y esperamos conocer sus objetivos y apoyar su progreso con las herramientas.",
+      "response_B_en": "Welcome to the program. We are glad to have your participation and look forward to learning about your goals and supporting your progress with the tools.",
+      "flipped": "True",
+      "ground_truth_winner": "B",
+      "preferred": "B",
+      "confidence": "high",
+      "rationale": "Response B is more empathetic and acknowledges the user's feelings, which is a critical aspect of emotional appropriateness (EA-1). It also reframes frustration with a silver lining, but this does not negate the fact that it addresses the emotional state more effectively.",
+      "flaws_in_A": [],
+      "flaws_in_B": []
+    }
+  ]
+}
