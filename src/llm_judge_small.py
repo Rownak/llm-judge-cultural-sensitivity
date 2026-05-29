@@ -459,11 +459,11 @@ def run_pairwise_judge_small(
 
     # Derive output path
     if output_path is None:
-        results_dir = Path(__file__).parent.parent / "results"
-        results_dir.mkdir(parents=True, exist_ok=True)
+        output_dir = Path(__file__).parent.parent / "output"
+        output_dir.mkdir(parents=True, exist_ok=True)
         dataset_stem = Path(csv_path).stem
         model_slug = model.replace("/", "-")
-        output_path = results_dir / f"judge_{dataset_stem}_{model_slug}_v{prompt_version}.json"
+        output_path = output_dir / f"judge_{dataset_stem}_{model_slug}_v{prompt_version}.json"
     else:
         output_path = Path(output_path)
 

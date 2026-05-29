@@ -361,13 +361,13 @@ def run_pairwise_judge(
             print(f"ERROR: {e}")
             raise
 
-    # Build output path: results/judge_{dataset_stem}_{model_slug}_v{prompt_version}.json
+    # Build output path: output/judge_{dataset_stem}_{model_slug}_v{prompt_version}.json
     if output_path is None:
-        results_dir = Path(__file__).parent.parent / "results"
-        results_dir.mkdir(parents=True, exist_ok=True)
+        output_dir = Path(__file__).parent.parent / "output"
+        output_dir.mkdir(parents=True, exist_ok=True)
         dataset_stem = Path(csv_path).stem   # e.g. "test_set_synthetic_prompts"
         model_slug = model.replace("/", "-")
-        output_path = results_dir / f"judge_{dataset_stem}_{model_slug}_v{prompt_version}.json"
+        output_path = output_dir / f"judge_{dataset_stem}_{model_slug}_v{prompt_version}.json"
     else:
         output_path = Path(output_path)
 

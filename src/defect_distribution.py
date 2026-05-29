@@ -243,9 +243,9 @@ def print_report(metadata: dict, defects: dict) -> None:
     print(report_text, end="")
 
 
-def save_report(report_text: str, results_path: str) -> Path:
+def save_report(report_text: str, results_path: str, output_dir: Path | None = None) -> Path:
     """
-    Save report to a text file in the results folder.
+    Save report to a text file in the results/defects folder.
 
     Output filename: defects_{dataset_stem}.txt
     (mirrors agreement.py which uses agr_{dataset_stem}.txt)
@@ -256,13 +256,14 @@ def save_report(report_text: str, results_path: str) -> Path:
         Formatted report text from format_report()
     results_path : str
         Path to the source judge_*.json file
+    output_dir : Path | None
+        Directory to write the report. Defaults to results/defects/ relative to project root.
 
     Returns
     -------
     Path
         Path to the saved report file
     """
-    results_dir = Path(results_path).parent
     stem = Path(results_path).stem  # e.g. "judge_dev_set_eng_spanish_..."
 
     if stem.startswith("judge_"):
@@ -271,7 +272,10 @@ def save_report(report_text: str, results_path: str) -> Path:
     else:
         output_filename = "defects.txt"
 
-    output_path = results_dir / output_filename
+    if output_dir is None:
+        output_dir = Path(__file__).parent.parent / "results" / "defects"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / output_filename
 
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(report_text)
@@ -279,7 +283,7 @@ def save_report(report_text: str, results_path: str) -> Path:
     return output_path
 
 
-def run(results_path: str) -> dict:
+def run(results_path: str, output_dir: Path | None = None) -> dict:
     """
     Orchestrate: load results → compute defects → print + save report.
 
@@ -299,7 +303,7 @@ def run(results_path: str) -> dict:
 
     print(report_text, end="")
 
-    report_path = save_report(report_text, results_path)
+    report_path = save_report(report_text, results_path, output_dir=output_dir)
     print(f"Report saved to {report_path}")
 
     return {
@@ -310,12 +314,19 @@ def run(results_path: str) -> dict:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python src/defect_distribution.py <path/to/judge_*.json> [...]")
-        sys.exit(1)
+    import argparse
 
-    for path in sys.argv[1:]:
+    parser = argparse.ArgumentParser(description="Compute defect distribution from judge results")
+    parser.add_argument("results_paths", nargs="+", help="Path(s) to judge_*.json file(s)")
+    parser.add_argument(
+        "--output-dir", default=None,
+        help="Directory to write defects_*.txt (default: results/defects/ relative to project root)"
+    )
+    args = parser.parse_args()
+
+    output_dir = Path(args.output_dir) if args.output_dir else None
+    for path in args.results_paths:
         if not Path(path).exists():
             print(f"WARNING: File not found: {path}, skipping")
             continue
-        run(path)
+        run(path, output_dir=output_dir)

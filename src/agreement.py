@@ -216,9 +216,9 @@ def print_report(metadata: dict, agreement: dict, cm: dict) -> None:
     print(report_text, end="")
 
 
-def save_report(report_text: str, results_path: str) -> Path:
+def save_report(report_text: str, results_path: str, output_dir: Path | None = None) -> Path:
     """
-    Save report to a text file in results folder.
+    Save report to a text file in results/agreement folder.
 
     Output filename: agr_{dataset_stem}_{model_slug}_v{rubric_version}.txt
 
@@ -228,13 +228,14 @@ def save_report(report_text: str, results_path: str) -> Path:
         Formatted report text from format_report()
     results_path : str
         Original path to judge_results_*.json (used to derive output filename)
+    output_dir : Path | None
+        Directory to write the report. Defaults to results/agreement/ relative to project root.
 
     Returns
     -------
     Path
         Path to saved report file
     """
-    results_dir = Path(results_path).parent
     results_file = Path(results_path).stem  # e.g. "judge_test_set_synthetic_prompts_claude-haiku-4-5-20251001_v1.0"
 
     # Extract remainder after "judge_" prefix, then mirror into agr_ filename
@@ -244,7 +245,10 @@ def save_report(report_text: str, results_path: str) -> Path:
     else:
         output_filename = "agr.txt"
 
-    output_path = results_dir / output_filename
+    if output_dir is None:
+        output_dir = Path(__file__).parent.parent / "results" / "agreement"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / output_filename
 
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(report_text)
@@ -252,7 +256,7 @@ def save_report(report_text: str, results_path: str) -> Path:
     return output_path
 
 
-def run(results_path: str) -> dict:
+def run(results_path: str, output_dir: Path | None = None) -> dict:
     """
     Orchestrate: load results → compute metrics → print + save report.
 
@@ -276,7 +280,7 @@ def run(results_path: str) -> dict:
     print(report_text, end="")
 
     # Save to file
-    report_path = save_report(report_text, results_path)
+    report_path = save_report(report_text, results_path, output_dir=output_dir)
     print(f"Report saved to {report_path}")
 
     # Return all metrics combined
@@ -290,15 +294,19 @@ def run(results_path: str) -> dict:
 
 if __name__ == "__main__":
     import sys
-    from pathlib import Path
+    import argparse
 
-    if len(sys.argv) < 2:
-        print("Usage: python src/agreement.py <path/to/judge_results_*.json>")
+    parser = argparse.ArgumentParser(description="Compute judge-vs-human agreement metrics")
+    parser.add_argument("results_path", help="Path to judge_*.json file")
+    parser.add_argument(
+        "--output-dir", default=None,
+        help="Directory to write agr_*.txt (default: results/agreement/ relative to project root)"
+    )
+    args = parser.parse_args()
+
+    if not Path(args.results_path).exists():
+        print(f"Error: File not found: {args.results_path}")
         sys.exit(1)
 
-    results_path = sys.argv[1]
-    if not Path(results_path).exists():
-        print(f"Error: File not found: {results_path}")
-        sys.exit(1)
-
-    run(results_path)
+    output_dir = Path(args.output_dir) if args.output_dir else None
+    run(args.results_path, output_dir=output_dir)

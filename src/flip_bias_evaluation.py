@@ -396,20 +396,21 @@ def format_report(metadata: dict, bias: dict,
 
 # ── save ──────────────────────────────────────────────────────────────────────
 
-def save_report(report_text: str, results_path: str) -> Path:
+def save_report(report_text: str, results_path: str, output_dir: Path | None = None) -> Path:
     """
-    Save report to results/ as posbias_{remainder}.txt.
+    Save report to results/flip_bias/ as posbias_{remainder}.txt.
 
     Parameters
     ----------
     report_text : str
     results_path : str
+    output_dir : Path | None
+        Directory to write the report. Defaults to results/flip_bias/ relative to project root.
 
     Returns
     -------
     Path
     """
-    results_dir = Path(results_path).parent
     stem = Path(results_path).stem
     if stem.startswith("judge_"):
         remainder = stem[len("judge_"):]
@@ -417,7 +418,10 @@ def save_report(report_text: str, results_path: str) -> Path:
     else:
         out_name = "posbias.txt"
 
-    out_path = results_dir / out_name
+    if output_dir is None:
+        output_dir = Path(__file__).parent.parent / "results" / "flip_bias"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    out_path = output_dir / out_name
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(report_text)
     return out_path
@@ -425,7 +429,7 @@ def save_report(report_text: str, results_path: str) -> Path:
 
 # ── orchestrator ──────────────────────────────────────────────────────────────
 
-def run(results_path: str) -> dict:
+def run(results_path: str, output_dir: Path | None = None) -> dict:
     """
     Load → pair → compute → format → print → save.
 
@@ -446,7 +450,7 @@ def run(results_path: str) -> dict:
 
     print(report_text, end="")
 
-    out_path = save_report(report_text, results_path)
+    out_path = save_report(report_text, results_path, output_dir=output_dir)
     print(f"Report saved to {out_path}")
 
     return {
@@ -460,13 +464,19 @@ def run(results_path: str) -> dict:
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python src/flip_bias_evaluation.py "
-              "<path/to/judge_*_pos_bias_*.json> [...]")
-        sys.exit(1)
+    import argparse
 
-    for path in sys.argv[1:]:
+    parser = argparse.ArgumentParser(description="Evaluate positional bias in judge results")
+    parser.add_argument("results_paths", nargs="+", help="Path(s) to judge_*_pos_bias_*.json")
+    parser.add_argument(
+        "--output-dir", default=None,
+        help="Directory to write posbias_*.txt (default: results/flip_bias/ relative to project root)"
+    )
+    args = parser.parse_args()
+
+    output_dir = Path(args.output_dir) if args.output_dir else None
+    for path in args.results_paths:
         if not Path(path).exists():
             print(f"WARNING: File not found: {path}, skipping")
             continue
-        run(path)
+        run(path, output_dir=output_dir)
