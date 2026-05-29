@@ -53,14 +53,15 @@ data/synthetic_prompts.csv ───┴── prepare_dataset.py ──► dev_s
                                                        llm_judge.py
                                                   (Haiku / DeepSeek / SmolLM3)
                                                                 │
-                                              results/judge_*.json
+                                               output/judge_*.json
                                               ┌─────────────────┼─────────────────┐
                                               ▼                 ▼                 ▼
                                        agreement.py    defect_distribution.py   flip_bias_evaluation.py
                                        (is it right?)   (where does it fail?)   (is it positionally biased?)
                                               │                 │                 │
                                               ▼                 ▼                 ▼
-                                       results/agr_*.txt  results/defects_*.txt  results/posbias_*.txt
+                                  results/agreement/  results/defects/    results/flip_bias/
+                                    agr_*.txt          defects_*.txt       posbias_*.txt
 ```
 
 ---
@@ -121,25 +122,25 @@ Doubles every row by swapping `response_A`↔`response_B`, producing `data/dev_s
 ```bash
 python src/llm_judge_small.py --input data/dev_set_eng_spanish_pos_bias.csv --prompt-version 0.3
 ```
-Output: `results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json`.
+Output: `output/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json`.
 
 ### 5. Validate the judge — agreement vs. humans
 ```bash
-python src/agreement.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
+python src/agreement.py output/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
 ```
-Saves accuracy + Cohen's kappa + confusion matrix to `results/agr_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`.
+Saves accuracy + Cohen's kappa + confusion matrix to `results/agreement/agr_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`.
 
 ### 6. Diagnose failures — defect distribution
 ```bash
-python src/defect_distribution.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
+python src/defect_distribution.py output/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
 ```
-Saves a per-dimension breakdown of judge mistakes to `results/defects_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`.
+Saves a per-dimension breakdown of judge mistakes to `results/defects/defects_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`.
 
 ### 7. Test for positional bias
 ```bash
-python src/flip_bias_evaluation.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
+python src/flip_bias_evaluation.py output/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
 ```
-Saves the bias report to `results/posbias_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`. A high `bias%` or a strong always-A / always-B pattern is the signal to iterate on the judge prompt (see [prompts/judge_prompt_v0_2.py](prompts/judge_prompt_v0_2.py) for an example mitigation with anti-positional-bias instruction).
+Saves the bias report to `results/flip_bias/posbias_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`. A high `bias%` or a strong always-A / always-B pattern is the signal to iterate on the judge prompt (see [prompts/judge_prompt_v0_2.py](prompts/judge_prompt_v0_2.py) for an example mitigation with anti-positional-bias instruction).
 
 ---
 
@@ -161,10 +162,14 @@ The small SmolLM3-3B judge has a strong **first-position bias**: it picks respon
 ```
 data/         synthetic prompt datasets + dev/test splits + pos-bias splits
 docs/         PROJECT_BRIEF.md, dataset schema notes
+output/       judge_*.json files (pairwise judge outputs)
 prompts/      versioned judge prompts (0, 0.1, 0.2, 0.3, 1, 2)
 rubrics/      rubric.md + JSON criteria for v1 / v2
 src/          dataset prep, judges, agreement, defect, positional-bias tools
-results/      judge_*.json plus agr_*.txt, defects_*.txt, posbias_*.txt reports
+results/
+  agreement/  agr_*.txt (agreement vs. ground truth)
+  defects/    defects_*.txt (per-dimension error breakdown)
+  flip_bias/  posbias_*.txt (positional bias diagnosis)
 ```
 
 ---
