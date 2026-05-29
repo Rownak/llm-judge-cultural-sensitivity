@@ -19,11 +19,14 @@ Memory requirements (SmolLM3-3B, ~6.15 GB weights)
 
   `device_map="auto"` handles single GPU, multi-GPU, and CPU fallback.
 
-Judge prompt versions (--judge-version)
----------------------------------------
-  v0 : Simple  (no rubric, cultural sensitivity & emotional appropriateness)
-  v1 : Medium  (rubric v1, 7 dimensions, simplified flaws)     [default]
-  v2 : Advanced (rubric v2, applicability checks, score anchors)
+Judge prompt versions (--prompt-version)
+-----------------------------------------
+  0   : Simple  (no rubric, cultural sensitivity & emotional appropriateness)
+  0.1 : Simple with locale-specific language
+  0.2 : Simple with positional bias instruction
+  0.3 : Simple with locale-specific language and positional bias instruction
+  1   : Medium  (rubric v1, 7 dimensions, simplified flaws)     [default]
+  2   : Advanced (rubric v2, applicability checks, score anchors)
 
 Limitations
 -----------
@@ -34,8 +37,8 @@ Limitations
 
 Usage
 -----
-  python src/llm_judge_small.py                              # SmolLM3-3B + v1
-  python src/llm_judge_small.py --judge-version v2           # SmolLM3-3B + v2
+  python src/llm_judge_small.py                              # SmolLM3-3B + prompt version 1
+  python src/llm_judge_small.py --prompt-version 0.3         # SmolLM3-3B + version 0.3
   python src/llm_judge_small.py --model HuggingFaceTB/SmolLM3-3B
 
   # 8 GB VRAM: add to .env  →  HF_LOAD_IN_8BIT=1
@@ -47,49 +50,105 @@ From notebook:
   results = run_pairwise_judge_small(
       "data/test_set_subtle_synthetic_prompts.csv",
       model="HuggingFaceTB/SmolLM3-3B",
-      judge_version="v2",
+      prompt_version="0.3",
   )
 """
 
 import csv
+import importlib
 import json
 import os
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
+import yaml
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
 
 # ---------------------------------------------------------------------------
-# Dynamic judge prompt loader  (same helper as llm_judge.py)
+# Dynamic judge prompt loader (YAML-backed, same as llm_judge.py)
 # ---------------------------------------------------------------------------
 
-def _load_judge_prompt(judge_version: str = "v0"):
+_YAML_PATH = Path(__file__).parent.parent / "prompts" / "judge_prompts.yaml"
+
+
+@lru_cache(maxsize=None)
+def _load_yaml_config() -> dict:
+    """Load and cache the judge prompts YAML config."""
+    with _YAML_PATH.open(encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def _load_judge_prompt(judge_version: str = "0", locale: str = "en-US"):
     """
-    Dynamically import the appropriate judge prompt module.
+    Load judge prompt from YAML config or rubric-based Python module.
+
+    Parameters
+    ----------
+    judge_version : str
+        Prompt version ("0", "0.1", "0.2", "0.3", "1", "2")
+    locale : str
+        Locale code (e.g., "en-US", "es-MX"). Used for locale-aware versions (0.1, 0.3).
 
     Returns
     -------
     tuple of (build_pairwise_prompt function, RUBRIC_VERSION string)
     """
-    sys.path.insert(0, str(Path(__file__).parent.parent / "prompts"))
+    config = _load_yaml_config()
 
-    if judge_version == "v0":
-        from judge_prompt_v0 import build_pairwise_prompt, RUBRIC_VERSION
-    elif judge_version == "v0.1":
-        from judge_prompt_v0_1 import build_pairwise_prompt, RUBRIC_VERSION
-        
-    elif judge_version == "v1":
-        from judge_prompt_v1 import build_pairwise_prompt, RUBRIC_VERSION
-    elif judge_version == "v2":
-        from judge_prompt_v2 import build_pairwise_prompt, RUBRIC_VERSION
+    if judge_version not in config:
+        available = sorted(config.keys())
+        raise ValueError(
+            f"Unknown prompt version '{judge_version}'. Available: {available}"
+        )
+
+    entry = config[judge_version]
+    rubric_version = entry["rubric_version"]
+
+    # Rubric-based versions (v1, v2) delegate to their Python modules
+    if entry.get("type") == "rubric-based":
+        module_name = f"judge_prompt_v{judge_version.replace('.', '_')}"
+        prompts_dir = str(Path(__file__).parent.parent / "prompts")
+        if prompts_dir not in sys.path:
+            sys.path.insert(0, prompts_dir)
+        mod = importlib.import_module(module_name)
+        return mod.build_pairwise_prompt, mod.RUBRIC_VERSION
+
+    # Template-based versions (v0, v0.1, v0.2, v0.3)
+    if entry.get("locale_aware"):
+        # Pick template by language detected from locale
+        lang = "es" if locale.startswith("es") else "en"
+        templates = entry.get("templates", {})
+        if lang not in templates:
+            available_langs = list(templates.keys())
+            raise ValueError(
+                f"Prompt version '{judge_version}' has no template for locale '{locale}' "
+                f"(language '{lang}'). Available: {available_langs}"
+            )
+        raw_template = templates[lang]
     else:
-        raise ValueError(f"Unknown judge version '{judge_version}'. Supported: v0, v1, v2")
-    print("PROMPTVERSION ", judge_version)
-    return build_pairwise_prompt, RUBRIC_VERSION
+        raw_template = entry.get("template")
+        if not raw_template:
+            raise ValueError(
+                f"Prompt version '{judge_version}' has no template defined"
+            )
+
+    def build_pairwise_prompt(
+        locale_: str, prompt_text: str, response_a: str, response_b: str
+    ) -> str:
+        """Render the prompt template with the given inputs."""
+        return raw_template.format(
+            locale=locale_,
+            prompt_text=prompt_text,
+            response_a=response_a,
+            response_b=response_b,
+        ).strip()
+
+    return build_pairwise_prompt, rubric_version
 
 
 # ---------------------------------------------------------------------------
@@ -341,7 +400,7 @@ def run_judge_small(row: dict, tokenizer, hf_model, build_pairwise_prompt_fn) ->
 def run_pairwise_judge_small(
     csv_path: str,
     model: str = DEFAULT_MODEL,
-    judge_version: str = "v0",
+    prompt_version: str = "0",
     output_path: str | None = None,
 ) -> list[dict]:
     """
@@ -349,11 +408,11 @@ def run_pairwise_judge_small(
 
     Parameters
     ----------
-    csv_path       : path to test_set.csv (or dev_set.csv)
-    model          : HuggingFace model repo ID (default: HuggingFaceTB/SmolLM3-3B)
-    judge_version  : judge prompt version ("v0", "v1", "v2"); default "v1"
-    output_path    : output JSON path; auto-derived when None:
-                     results/judge_{dataset_stem}_{model_slug}_v{judge_version}.json
+    csv_path        : path to test_set.csv (or dev_set.csv)
+    model           : HuggingFace model repo ID (default: HuggingFaceTB/SmolLM3-3B)
+    prompt_version  : prompt version ("0","0.1","0.2","0.3", "1", "2"); default "0"
+    output_path     : output JSON path; auto-derived when None:
+                      results/judge_{dataset_stem}_{model_slug}_v{prompt_version}.json
 
     Returns
     -------
@@ -361,7 +420,7 @@ def run_pairwise_judge_small(
     """
     load_dotenv()
 
-    build_pairwise_prompt_fn, rubric_version = _load_judge_prompt(judge_version)
+    build_pairwise_prompt_fn, rubric_version = _load_judge_prompt(prompt_version)
 
     # Load model once — kept in memory for the full batch
     tokenizer, hf_model = _load_model(model)
@@ -370,7 +429,7 @@ def run_pairwise_judge_small(
     with open(csv_path, encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f, skipinitialspace=True))
 
-    print(f"Judge Version: {judge_version}")
+    print(f"Prompt Version: {prompt_version}")
     print(f"Model        : {model}")
     print(f"Dataset      : {csv_path} ({len(rows)} rows)")
     print()
@@ -404,12 +463,12 @@ def run_pairwise_judge_small(
         results_dir.mkdir(parents=True, exist_ok=True)
         dataset_stem = Path(csv_path).stem
         model_slug = model.replace("/", "-")
-        output_path = results_dir / f"judge_{dataset_stem}_{model_slug}_v{judge_version}.json"
+        output_path = results_dir / f"judge_{dataset_stem}_{model_slug}_v{prompt_version}.json"
     else:
         output_path = Path(output_path)
 
     output_data = {
-        "judge_version": judge_version,
+        "prompt_version": prompt_version,
         "rubric_version": rubric_version,
         "model": model,
         "n_evaluated": len(results),
@@ -441,8 +500,8 @@ if __name__ == "__main__":
         help=f"HuggingFace model repo ID (default: {DEFAULT_MODEL})"
     )
     parser.add_argument(
-        "--judge-version", default="v0", choices=["v0","v0.1", "v1", "v2"],
-        help="Judge prompt version (default: v1)"
+        "--prompt-version", default="0", choices=["0", "0.1", "0.2", "0.3", "1", "2"],
+        help="Prompt version (default: 0)"
     )
     parser.add_argument(
         "--input", default=None,
@@ -462,7 +521,7 @@ if __name__ == "__main__":
     results = run_pairwise_judge_small(
         input_path,
         model=args.model,
-        judge_version=args.judge_version,
+        prompt_version=args.prompt_version,
     )
 
     print()
