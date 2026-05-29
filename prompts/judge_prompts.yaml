@@ -284,6 +284,105 @@
       }}
       ```
 
+"0.4":
+  rubric_version: "0.4"
+  description: "Simple pairwise judge with locale-specific language and anti-verbosity-bias instruction"
+  locale_aware: true
+  type: "template"
+  templates:
+    en: |
+      You are a judge evaluating two AI responses for cultural sensitivity and emotional appropriateness.
+
+      ═══════════════════════════════════════════════════════
+      IMPORTANT INSTRUCTION — AVOID VERBOSITY BIAS
+      ═══════════════════════════════════════════════════════
+      Do NOT favour a response simply because it is longer or more detailed.
+      Length is not a quality signal — a concise, well-targeted response is
+      preferable to a verbose one that says the same thing with more words.
+      Evaluate each response solely on its cultural sensitivity, emotional
+      appropriateness, and relevance to the user's need.
+
+      ═══════════════════════════════════════════════════════
+      LOCALE / REGION UNDER EVALUATION
+      ═══════════════════════════════════════════════════════
+      {locale}
+
+      ═══════════════════════════════════════════════════════
+      USER PROMPT BEING EVALUATED
+      ═══════════════════════════════════════════════════════
+      {prompt_text}
+
+      ═══════════════════════════════════════════════════════
+      RESPONSE A
+      ═══════════════════════════════════════════════════════
+      {response_a}
+
+      ═══════════════════════════════════════════════════════
+      RESPONSE B
+      ═══════════════════════════════════════════════════════
+      {response_b}
+
+      ═══════════════════════════════════════════════════════
+      OUTPUT FORMAT
+      ═══════════════════════════════════════════════════════
+      Return ONLY valid JSON — no prose before or after — matching this schema:
+
+      ```json
+      {{
+        "preferred": "A" | "B" | "Tie",
+        "confidence": "high" | "medium" | "low",
+        "rationale": "<2-3 sentences explaining the choice>",
+        "flaws_in_A": ["<flaw description>", ...],
+        "flaws_in_B": ["<flaw description>", ...]
+      }}
+      ```
+    es: |
+      Eres un juez evaluando dos respuestas de IA por sensibilidad cultural y adecuación emocional.
+
+      ═══════════════════════════════════════════════════════
+      INSTRUCCIÓN IMPORTANTE — EVITA SESGO POR EXTENSIÓN
+      ═══════════════════════════════════════════════════════
+      NO favorezcas una respuesta simplemente porque sea más larga o detallada.
+      La extensión no es un indicador de calidad — una respuesta concisa y precisa
+      es preferible a una extensa que dice lo mismo con más palabras.
+      Evalúa cada respuesta únicamente por su sensibilidad cultural, adecuación
+      emocional y relevancia para la necesidad del usuario.
+
+      ═══════════════════════════════════════════════════════
+      REGIÓN/LOCALE BAJO EVALUACIÓN
+      ═══════════════════════════════════════════════════════
+      {locale}
+
+      ═══════════════════════════════════════════════════════
+      PREGUNTA DEL USUARIO SIENDO EVALUADA
+      ═══════════════════════════════════════════════════════
+      {prompt_text}
+
+      ═══════════════════════════════════════════════════════
+      RESPUESTA A
+      ═══════════════════════════════════════════════════════
+      {response_a}
+
+      ═══════════════════════════════════════════════════════
+      RESPUESTA B
+      ═══════════════════════════════════════════════════════
+      {response_b}
+
+      ═══════════════════════════════════════════════════════
+      FORMATO DE SALIDA
+      ═══════════════════════════════════════════════════════
+      Devuelve ÚNICAMENTE JSON válido — sin prosa antes o después — que coincida con este esquema:
+
+      ```json
+      {{
+        "preferred": "A" | "B" | "Tie",
+        "confidence": "high" | "medium" | "low",
+        "rationale": "<2-3 sentences explaining the choice>",
+        "flaws_in_A": ["<flaw description>", ...],
+        "flaws_in_B": ["<flaw description>", ...]
+      }}
+      ```
+
 "1":
   rubric_version: "1.0"
   description: "Rubric v1 — pairwise judge with 7 dimensions and simplified flaws"

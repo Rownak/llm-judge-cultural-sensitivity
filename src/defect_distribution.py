@@ -75,7 +75,8 @@ def compute_defects(records: list[dict]) -> dict:
         {
             n_total, n_defects, n_ties,
             by_locale, by_scenario_type, by_primary_criterion,
-            by_confidence, by_flaw_type
+            by_confidence, by_flaw_type,
+            verbosity_bias (optional, only if verbose_position present)
         }
         Each by_* value is a dict of {key: {"total": int, "defects": int}}
     """
@@ -107,7 +108,7 @@ def compute_defects(records: list[dict]) -> dict:
             if is_defect:
                 breakdown[dim_key][key]["defects"] += 1
 
-    return {
+    result = {
         "n_total": len(records),
         "n_defects": len(defects_list),
         "n_ties": n_ties,
@@ -117,6 +118,27 @@ def compute_defects(records: list[dict]) -> dict:
         "by_confidence": dict(breakdown["by_confidence"]),
         "by_flaw_type": dict(breakdown["by_flaw_type"]),
     }
+
+    # Verbosity bias analysis — only when verbose_position is present in the data
+    vb_records = [r for r in records_with_gt if r.get("verbose_position") in ("A", "B")]
+    if vb_records:
+        # Judge picked the verbose response
+        picked_verbose = [r for r in vb_records if r["preferred"] == r["verbose_position"]]
+        # Judge picked verbose AND it was wrong
+        verbose_defects = [r for r in picked_verbose if id(r) in defect_ids]
+        # Judge picked the non-verbose response AND it was wrong
+        non_verbose_defects = [
+            r for r in vb_records
+            if r["preferred"] != r["verbose_position"] and id(r) in defect_ids
+        ]
+        result["verbosity_bias"] = {
+            "n_with_verbosity": len(vb_records),
+            "n_picked_verbose": len(picked_verbose),
+            "n_verbose_defects": len(verbose_defects),
+            "n_non_verbose_defects": len(non_verbose_defects),
+        }
+
+    return result
 
 
 def _format_table(
@@ -220,6 +242,32 @@ def format_report(metadata: dict, defects: dict) -> str:
         lines.append(title)
         lines.append(THIN)
         lines.extend(_format_table(defects[key], label_header, sort_by_defects))
+        lines.append("")
+
+    # Verbosity bias section — only printed when data has verbose_position
+    if "verbosity_bias" in defects:
+        vb = defects["verbosity_bias"]
+        n = vb["n_with_verbosity"]
+        lines.append(THIN)
+        lines.append("Verbosity Bias Analysis")
+        lines.append(THIN)
+        lines.append(f"  Records with verbose_position   : {n}")
+        pick_rate = _defect_rate(vb["n_picked_verbose"], n)
+        lines.append(
+            f"  Picked verbose response         : {vb['n_picked_verbose']} / {n}"
+            f"  ({pick_rate:.1%})"
+        )
+        vdef_rate = _defect_rate(vb["n_verbose_defects"], vb["n_picked_verbose"])
+        lines.append(
+            f"  Defects among verbose picks     : {vb['n_verbose_defects']} / {vb['n_picked_verbose']}"
+            f"  (defect rate {vdef_rate:.3f})"
+        )
+        nvdef_denom = n - vb["n_picked_verbose"]
+        nvdef_rate = _defect_rate(vb["n_non_verbose_defects"], nvdef_denom)
+        lines.append(
+            f"  Defects among non-verbose picks : {vb['n_non_verbose_defects']} / {nvdef_denom}"
+            f"  (defect rate {nvdef_rate:.3f})"
+        )
         lines.append("")
 
     lines.append(WIDE)

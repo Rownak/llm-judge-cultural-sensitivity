@@ -34,9 +34,19 @@ def assign_position(row, seed):
       - response_A, response_B, response_A_en, response_B_en
       - ground_truth_winner: "A" or "B" (which is the good response)
       - flipped: bool (True if good is in position B)
+      - verbose_position: "A", "B", or None (which position has the verbose response)
     """
     rng = random.Random(seed)
     is_flipped = rng.random() < 0.5
+
+    # Determine which response is verbose (if verbosity column exists)
+    verbosity = row.get("verbosity", None)
+    verbose_position = None
+    if verbosity:
+        if verbosity == "good":
+            verbose_position = "B" if is_flipped else "A"
+        elif verbosity == "flawed":
+            verbose_position = "A" if is_flipped else "B"
 
     if is_flipped:
         return {
@@ -46,6 +56,7 @@ def assign_position(row, seed):
             "response_B_en": row["response_good_en"],
             "ground_truth_winner": "B",
             "flipped": True,
+            "verbose_position": verbose_position,
         }
     else:
         return {
@@ -55,6 +66,7 @@ def assign_position(row, seed):
             "response_B_en": row["response_flawed_en"],
             "ground_truth_winner": "A",
             "flipped": False,
+            "verbose_position": verbose_position,
         }
 
 
@@ -129,6 +141,7 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42, input_stem=N
         "response_B_en",
         "flipped",
         "ground_truth_winner",
+        "verbose_position",
     ]
 
     with open(dev_output, "w", encoding="utf-8", newline="") as f:
@@ -150,6 +163,7 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42, input_stem=N
                 "response_B_en": pos["response_B_en"],
                 "flipped": pos["flipped"],
                 "ground_truth_winner": pos["ground_truth_winner"],
+                "verbose_position": pos["verbose_position"],
             })
     print(f"  Output: {dev_output}")
 
@@ -177,6 +191,7 @@ def prepare_dataset(input_csv, output_dir, test_ratio=0.2, seed=42, input_stem=N
                 "response_B_en": pos["response_B_en"],
                 "flipped": pos["flipped"],
                 "ground_truth_winner": pos["ground_truth_winner"],
+                "verbose_position": pos["verbose_position"],
             })
     print(f"  Output: {test_output}")
 

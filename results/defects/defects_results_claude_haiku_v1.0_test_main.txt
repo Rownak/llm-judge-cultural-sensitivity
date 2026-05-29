@@ -1,0 +1,63 @@
+
+============================================================
+Defect Distribution Report
+============================================================
+
+Model          : claude-haiku-4-5-20251001
+Rubric version : 1.0
+N total        : 11
+N defects      : 0   (rate: 0.000)
+
+------------------------------------------------------------
+Breakdown by Locale
+------------------------------------------------------------
+  locale   total  defects    rate
+  ------  ------  -------  ------
+  bn-BD        4        0   0.000
+  en-US        5        0   0.000
+  ja-JP        2        0   0.000
+
+------------------------------------------------------------
+Breakdown by Scenario Type
+------------------------------------------------------------
+  scenario_type   total  defects    rate
+  -------------  ------  -------  ------
+  cultural            8        0   0.000
+  emotional           3        0   0.000
+
+------------------------------------------------------------
+Breakdown by Primary Criterion
+------------------------------------------------------------
+  criterion   total  defects    rate
+  ---------  ------  -------  ------
+  CS-1            3        0   0.000
+  CS-2            1        0   0.000
+  CS-3            2        0   0.000
+  CS-4            2        0   0.000
+  EA-1            1        0   0.000
+  EA-2            1        0   0.000
+  EA-3            1        0   0.000
+
+------------------------------------------------------------
+Breakdown by Flaw Type
+------------------------------------------------------------
+  flaw_type                                total  defects    rate
+  --------------------------------------  ------  -------  ------
+  register_too_casual                          2        0   0.000
+  imposed_cultural_framework                   2        0   0.000
+  tone_neutral_for_celebration                 1        0   0.000
+  register_mixed_formal_casual                 1        0   0.000
+  ethnic_dietary_assumption                    1        0   0.000
+  dismissive_comparison                        1        0   0.000
+  missing_emotional_acknowledgment             1        0   0.000
+  holiday_conflation                           1        0   0.000
+  cultural_reframing_as_western_analogue       1        0   0.000
+
+------------------------------------------------------------
+Breakdown by Confidence
+------------------------------------------------------------
+  confidence   total  defects    rate
+  ----------  ------  -------  ------
+  high            11        0   0.000
+
+============================================================

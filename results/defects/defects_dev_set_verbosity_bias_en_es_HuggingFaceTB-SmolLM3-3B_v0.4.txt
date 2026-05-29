@@ -1,0 +1,85 @@
+
+============================================================
+Defect Distribution Report
+============================================================
+
+Model          : HuggingFaceTB/SmolLM3-3B
+Rubric version : 0.4
+Prompt version : 0.4
+N total        : 38
+N defects      : 11   (rate: 0.289)
+
+------------------------------------------------------------
+Breakdown by Locale
+------------------------------------------------------------
+  locale   total  defects    rate
+  ------  ------  -------  ------
+  en-US       19        6   0.316
+  es-MX       19        5   0.263
+
+------------------------------------------------------------
+Breakdown by Scenario Type
+------------------------------------------------------------
+  scenario_type   total  defects    rate
+  -------------  ------  -------  ------
+  cultural           24        5   0.208
+  emotional          14        6   0.429
+
+------------------------------------------------------------
+Breakdown by Primary Criterion
+------------------------------------------------------------
+  criterion   total  defects    rate
+  ---------  ------  -------  ------
+  CS-1            6        2   0.333
+  CS-2            7        2   0.286
+  CS-3            5        0   0.000
+  CS-4            6        1   0.167
+  EA-1            5        3   0.600
+  EA-2            4        0   0.000
+  EA-3            5        3   0.600
+
+------------------------------------------------------------
+Breakdown by Flaw Type
+------------------------------------------------------------
+  flaw_type                                 total  defects    rate
+  ---------------------------------------  ------  -------  ------
+  register_too_formal                           2        2   1.000
+  accent_class_stereotype                       2        2   1.000
+  logistical_response_to_guilt                  2        2   1.000
+  dismissive_comparison                         2        1   0.500
+  missing_emotional_acknowledgment              2        1   0.500
+  just_study_harder                             2        1   0.500
+  assumes_christian_holiday_participation       1        1   1.000
+  dismissive_silver_lining                      1        1   1.000
+  register_too_casual_with_elders               2        0   0.000
+  assumes_halal_rule_sufficient                 2        0   0.000
+  veteran_hero_overgeneralization               2        0   0.000
+  overly_corporate_condolence                   2        0   0.000
+  assumes_spicy_mexican_food                    2        0   0.000
+  tone_too_neutral_for_celebration              2        0   0.000
+  cinco_de_mayo_party_stereotype                2        0   0.000
+  native_american_monolith                      2        0   0.000
+  quinceanera_sweet_sixteen_equivalence         2        0   0.000
+  tone_clinical_for_celebration                 1        0   0.000
+  assumes_thanksgiving_food_preference          1        0   0.000
+  trivializes_dia_de_muertos                    1        0   0.000
+  subtle_family_size_stereotype                 1        0   0.000
+  overly_positive_for_divorce                   1        0   0.000
+  premature_pivot_to_advice                     1        0   0.000
+
+------------------------------------------------------------
+Breakdown by Confidence
+------------------------------------------------------------
+  confidence   total  defects    rate
+  ----------  ------  -------  ------
+  high            38       11   0.289
+
+------------------------------------------------------------
+Verbosity Bias Analysis
+------------------------------------------------------------
+  Records with verbose_position   : 38
+  Picked verbose response         : 25 / 38  (65.8%)
+  Defects among verbose picks     : 9 / 25  (defect rate 0.360)
+  Defects among non-verbose picks : 2 / 13  (defect rate 0.154)
+
+============================================================

@@ -400,7 +400,7 @@ if __name__ == "__main__":
         help=f"Model name (default: {DEFAULT_MODEL})"
     )
     parser.add_argument(
-        "--prompt-version", default="1", choices=["0", "0.1", "0.2", "0.3", "1", "2"],
+        "--prompt-version", default="1", choices=["0", "0.1", "0.2", "0.3", "0.4", "1", "2"],
         help="Prompt version (default: 1)"
     )
     parser.add_argument(

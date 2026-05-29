@@ -31,7 +31,7 @@ All data is **synthetic and self-authored** — never scraped, never from real u
 |---|---|---|
 | **Synthetic dataset** ([data/](data/)) | Hand-authored prompt pairs across `en-US`, `es-ES`, with each pair having a `ground_truth_winner` and a labelled `flaw_type`. | Gives a known answer key so the judge's accuracy can be measured. |
 | **Versioned rubric** ([rubrics/](rubrics/)) | Decomposes cultural sensitivity (CS-1…CS-4) and emotional appropriateness (EA-1…EA-3) into observable sub-criteria with examples. | Forces the fuzzy construct to become concrete and reviewable. |
-| **Versioned judge prompts** ([prompts/](prompts/)) | `0` (simple), `0.1` (locale-specific language), `0.2` (anti-positional-bias), `0.3` (locale-specific + anti-bias), `1`, `2` (rubric-aware). | Lets us A/B prompt designs and quantify which fixes actually work. |
+| **Versioned judge prompts** ([prompts/](prompts/)) | `0` (simple), `0.1` (locale-specific language), `0.2` (anti-positional-bias), `0.3` (locale-specific + anti-positional-bias), `0.4` (locale-specific + anti-verbosity-bias), `1`, `2` (rubric-aware). | Lets us A/B prompt designs and quantify which fixes actually work. |
 | **Multi-model LLM-as-Judge** ([src/llm_judge.py](src/llm_judge.py), [src/llm_judge_small.py](src/llm_judge_small.py)) | Pairwise judge supporting Claude Haiku, DeepSeek, and a local HuggingFace SmolLM3-3B; emits structured JSON. | Compares judges of different sizes, costs, and providers under the same rubric. |
 | **Agreement metrics** ([src/agreement.py](src/agreement.py)) | Raw accuracy + **Cohen's kappa** + confusion matrix vs. ground truth. | A judge is worthless until you prove it agrees with humans — kappa beats accuracy because it accounts for chance. |
 | **Defect distribution** ([src/defect_distribution.py](src/defect_distribution.py)) | Breaks judge mistakes down by locale, scenario_type, primary_criterion, flaw_type, and confidence. | Tells you *where* the judge fails, not just *how often*. Drives the next iteration. |
@@ -172,6 +172,23 @@ When comparing a simple English-only prompt (`v0`) vs. a locale-specific prompt 
 The small SmolLM3-3B judge has a strong **first-position bias**: it picks response A in over half of all pairs regardless of content. Adding an explicit "do not favour a response based on position" instruction to the prompt (`0.2`) barely moves the bias rate (0.657 → 0.632) or the always-A rate (0.571 → 0.553) — **prompt instruction alone is not enough to mitigate positional bias in a small model**, even though both-legs-correct does rise from 8.6% to 23.7%.
 
 **Next step:** instead of relying on the prompt, evaluate every pair in both orderings and aggregate — e.g. take the judge's verdict only when it agrees with itself across positions, or score using a position-averaged preference. That turns positional bias from a confound into something the pipeline neutralises automatically.
+
+---
+
+## Findings (SmolLM3-3B on `dev_set_verbosity_bias_en_es`)
+
+### Verbosity Bias Persists Despite Prompt Instruction
+
+| Prompt version | Picked verbose | Defect rate (verbose picks) | Defect rate (non-verbose picks) |
+|---|---:|---:|---:|
+| `0` (no anti-verbosity) | 25 / 38 (65.8%) | 0.360 | 0.077 |
+| `0.4` (anti-verbosity instruction) | 25 / 38 (65.8%) | 0.360 | 0.154 |
+
+SmolLM3-3B shows a clear **verbosity bias**: it prefers the longer response in 65.8% of pairs — well above the 50% baseline expected if length were irrelevant. More critically, when the judge picks the verbose response it is wrong 36% of the time, versus only 7.7% when it picks the concise one, confirming the bias is driving real errors.
+
+Adding an explicit anti-verbosity instruction (`v0.4`: *"Length is not a quality signal — a concise, well-targeted response is preferable to a verbose one"*) has **no effect**: the verbose pick rate stays at 65.8% and the defect rate among verbose picks stays at 0.360. The only change is a slight rise in non-verbose defects (0.077 → 0.154), consistent with random noise at this sample size.
+
+**Conclusion:** Like positional bias, verbosity bias in a small local model cannot be corrected through prompt instruction alone. Mitigation requires architectural or post-processing approaches — for example, length-normalised scoring or stripping responses to equal token counts before judging.
 
 ---
 
