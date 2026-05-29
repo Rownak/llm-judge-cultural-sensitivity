@@ -1,0 +1,299 @@
+# Judge prompt configurations for LLM-as-Judge cultural sensitivity evaluation
+#
+# Versions 0-3 use static templates that are interpolated with {locale}, {prompt_text},
+# {response_a}, {response_b} at runtime.
+#
+# Versions 1-2 are rubric-based: they dynamically generate prompts from external rubric JSON
+# files and cannot be represented as static templates. The YAML holds only metadata for these.
+
+"0":
+  rubric_version: "0.0"
+  description: "Simple pairwise judge — no rubric, just cultural sensitivity & emotional appropriateness"
+  locale_aware: false
+  type: "template"
+  template: |
+    You are a judge evaluating two AI responses for cultural sensitivity and emotional appropriateness.
+
+    ═══════════════════════════════════════════════════════
+    LOCALE / REGION UNDER EVALUATION
+    ═══════════════════════════════════════════════════════
+    {locale}
+
+    ═══════════════════════════════════════════════════════
+    USER PROMPT BEING EVALUATED
+    ═══════════════════════════════════════════════════════
+    {prompt_text}
+
+    ═══════════════════════════════════════════════════════
+    RESPONSE A
+    ═══════════════════════════════════════════════════════
+    {response_a}
+
+    ═══════════════════════════════════════════════════════
+    RESPONSE B
+    ═══════════════════════════════════════════════════════
+    {response_b}
+
+    ═══════════════════════════════════════════════════════
+    OUTPUT FORMAT
+    ═══════════════════════════════════════════════════════
+    Return ONLY valid JSON — no prose before or after — matching this schema:
+
+    ```json
+    {{
+      "preferred": "A" | "B" | "Tie",
+      "confidence": "high" | "medium" | "low",
+      "rationale": "<2-3 sentences explaining the choice>",
+      "flaws_in_A": ["<flaw description>", ...],
+      "flaws_in_B": ["<flaw description>", ...]
+    }}
+    ```
+
+"0.1":
+  rubric_version: "0.1"
+  description: "Simple pairwise judge with locale-specific language (English or Spanish)"
+  locale_aware: true
+  type: "template"
+  templates:
+    en: |
+      You are a judge evaluating two AI responses for cultural sensitivity and emotional appropriateness.
+
+      ═══════════════════════════════════════════════════════
+      LOCALE / REGION UNDER EVALUATION
+      ═══════════════════════════════════════════════════════
+      {locale}
+
+      ═══════════════════════════════════════════════════════
+      USER PROMPT BEING EVALUATED
+      ═══════════════════════════════════════════════════════
+      {prompt_text}
+
+      ═══════════════════════════════════════════════════════
+      RESPONSE A
+      ═══════════════════════════════════════════════════════
+      {response_a}
+
+      ═══════════════════════════════════════════════════════
+      RESPONSE B
+      ═══════════════════════════════════════════════════════
+      {response_b}
+
+      ═══════════════════════════════════════════════════════
+      OUTPUT FORMAT
+      ═══════════════════════════════════════════════════════
+      Return ONLY valid JSON — no prose before or after — matching this schema:
+
+      ```json
+      {{
+        "preferred": "A" | "B" | "Tie",
+        "confidence": "high" | "medium" | "low",
+        "rationale": "<2-3 sentences explaining the choice>",
+        "flaws_in_A": ["<flaw description>", ...],
+        "flaws_in_B": ["<flaw description>", ...]
+      }}
+      ```
+    es: |
+      Eres un juez evaluando dos respuestas de IA por sensibilidad cultural y adecuación emocional.
+
+      ═══════════════════════════════════════════════════════
+      REGIÓN/LOCALE BAJO EVALUACIÓN
+      ═══════════════════════════════════════════════════════
+      {locale}
+
+      ═══════════════════════════════════════════════════════
+      PREGUNTA DEL USUARIO SIENDO EVALUADA
+      ═══════════════════════════════════════════════════════
+      {prompt_text}
+
+      ═══════════════════════════════════════════════════════
+      RESPUESTA A
+      ═══════════════════════════════════════════════════════
+      {response_a}
+
+      ═══════════════════════════════════════════════════════
+      RESPUESTA B
+      ═══════════════════════════════════════════════════════
+      {response_b}
+
+      ═══════════════════════════════════════════════════════
+      FORMATO DE SALIDA
+      ═══════════════════════════════════════════════════════
+      Devuelve ÚNICAMENTE JSON válido — sin prosa antes o después — que coincida con este esquema:
+
+      ```json
+      {{
+        "preferred": "A" | "B" | "Tie",
+        "confidence": "high" | "medium" | "low",
+        "rationale": "<2-3 sentences explaining the choice>",
+        "flaws_in_A": ["<flaw description>", ...],
+        "flaws_in_B": ["<flaw description>", ...]
+      }}
+      ```
+
+"0.2":
+  rubric_version: "0.2"
+  description: "Simple pairwise judge with anti-positional-bias instruction"
+  locale_aware: false
+  type: "template"
+  template: |
+    You are a judge evaluating two AI responses for cultural sensitivity and emotional appropriateness.
+
+    ═══════════════════════════════════════════════════════
+    IMPORTANT INSTRUCTION — AVOID POSITIONAL BIAS
+    ═══════════════════════════════════════════════════════
+    Do NOT favour a response simply because it is labelled A or B,
+    or because it appears first or second.
+    The labels A and B are arbitrary — evaluate each response solely
+    on its content, quality, cultural sensitivity, and emotional
+    appropriateness. Your verdict must be the same regardless of
+    which position a response occupies.
+
+    ═══════════════════════════════════════════════════════
+    LOCALE / REGION UNDER EVALUATION
+    ═══════════════════════════════════════════════════════
+    {locale}
+
+    ═══════════════════════════════════════════════════════
+    USER PROMPT BEING EVALUATED
+    ═══════════════════════════════════════════════════════
+    {prompt_text}
+
+    ═══════════════════════════════════════════════════════
+    RESPONSE A
+    ═══════════════════════════════════════════════════════
+    {response_a}
+
+    ═══════════════════════════════════════════════════════
+    RESPONSE B
+    ═══════════════════════════════════════════════════════
+    {response_b}
+
+    ═══════════════════════════════════════════════════════
+    OUTPUT FORMAT
+    ═══════════════════════════════════════════════════════
+    Return ONLY valid JSON — no prose before or after — matching this schema:
+
+    ```json
+    {{
+      "preferred": "A" | "B" | "Tie",
+      "confidence": "high" | "medium" | "low",
+      "rationale": "<2-3 sentences explaining the choice>",
+      "flaws_in_A": ["<flaw description>", ...],
+      "flaws_in_B": ["<flaw description>", ...]
+    }}
+    ```
+
+"0.3":
+  rubric_version: "0.3"
+  description: "Simple pairwise judge with locale-specific language and anti-positional-bias instruction"
+  locale_aware: true
+  type: "template"
+  templates:
+    en: |
+      You are a judge evaluating two AI responses for cultural sensitivity and emotional appropriateness.
+
+      ═══════════════════════════════════════════════════════
+      IMPORTANT INSTRUCTION — AVOID POSITIONAL BIAS
+      ═══════════════════════════════════════════════════════
+      Do NOT favour a response simply because it is labelled A or B,
+      or because it appears first or second.
+      The labels A and B are arbitrary — evaluate each response solely
+      on its content, quality, cultural sensitivity, and emotional
+      appropriateness. Your verdict must be the same regardless of
+      which position a response occupies.
+
+      ═══════════════════════════════════════════════════════
+      LOCALE / REGION UNDER EVALUATION
+      ═══════════════════════════════════════════════════════
+      {locale}
+
+      ═══════════════════════════════════════════════════════
+      USER PROMPT BEING EVALUATED
+      ═══════════════════════════════════════════════════════
+      {prompt_text}
+
+      ═══════════════════════════════════════════════════════
+      RESPONSE A
+      ═══════════════════════════════════════════════════════
+      {response_a}
+
+      ═══════════════════════════════════════════════════════
+      RESPONSE B
+      ═══════════════════════════════════════════════════════
+      {response_b}
+
+      ═══════════════════════════════════════════════════════
+      OUTPUT FORMAT
+      ═══════════════════════════════════════════════════════
+      Return ONLY valid JSON — no prose before or after — matching this schema:
+
+      ```json
+      {{
+        "preferred": "A" | "B" | "Tie",
+        "confidence": "high" | "medium" | "low",
+        "rationale": "<2-3 sentences explaining the choice>",
+        "flaws_in_A": ["<flaw description>", ...],
+        "flaws_in_B": ["<flaw description>", ...]
+      }}
+      ```
+    es: |
+      Eres un juez evaluando dos respuestas de IA por sensibilidad cultural y adecuación emocional.
+
+      ═══════════════════════════════════════════════════════
+      INSTRUCCIÓN IMPORTANTE — EVITA SESGO POSICIONAL
+      ═══════════════════════════════════════════════════════
+      NO favorezcas una respuesta simplemente porque esté etiquetada como A o B,
+      o porque aparezca primero o segundo.
+      Las etiquetas A y B son arbitrarias — evalúa cada respuesta únicamente
+      por su contenido, calidad, sensibilidad cultural y adecuación emocional.
+      Tu veredicto debe ser el mismo independientemente de la posición
+      que ocupe una respuesta.
+
+      ═══════════════════════════════════════════════════════
+      REGIÓN/LOCALE BAJO EVALUACIÓN
+      ═══════════════════════════════════════════════════════
+      {locale}
+
+      ═══════════════════════════════════════════════════════
+      PREGUNTA DEL USUARIO SIENDO EVALUADA
+      ═══════════════════════════════════════════════════════
+      {prompt_text}
+
+      ═══════════════════════════════════════════════════════
+      RESPUESTA A
+      ═══════════════════════════════════════════════════════
+      {response_a}
+
+      ═══════════════════════════════════════════════════════
+      RESPUESTA B
+      ═══════════════════════════════════════════════════════
+      {response_b}
+
+      ═══════════════════════════════════════════════════════
+      FORMATO DE SALIDA
+      ═══════════════════════════════════════════════════════
+      Devuelve ÚNICAMENTE JSON válido — sin prosa antes o después — que coincida con este esquema:
+
+      ```json
+      {{
+        "preferred": "A" | "B" | "Tie",
+        "confidence": "high" | "medium" | "low",
+        "rationale": "<2-3 sentences explaining the choice>",
+        "flaws_in_A": ["<flaw description>", ...],
+        "flaws_in_B": ["<flaw description>", ...]
+      }}
+      ```
+
+"1":
+  rubric_version: "1.0"
+  description: "Rubric v1 — pairwise judge with 7 dimensions and simplified flaws"
+  locale_aware: false
+  type: "rubric-based"
+  # No template field — build_pairwise_prompt is generated dynamically from rubrics/judge_rubric_v1.json
+
+"2":
+  rubric_version: "2.0"
+  description: "Rubric v2 — pairwise judge with applicability checks and score anchors"
+  locale_aware: false
+  type: "rubric-based"
+  # No template field — build_pairwise_prompt is generated dynamically from rubrics/judge_rubric_v2.json
