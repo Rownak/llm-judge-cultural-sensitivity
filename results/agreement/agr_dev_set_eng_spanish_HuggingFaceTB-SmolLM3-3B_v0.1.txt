@@ -5,13 +5,13 @@ Judge Agreement Report
 
 Model          : HuggingFaceTB/SmolLM3-3B
 Rubric version : 0.1
-N evaluated    : 77
+N evaluated    : 38  (37 used, 1 Tie excluded)
 
-Raw accuracy   : 0.558  (43/77)
-Cohen's kappa  : 0.111
+Raw accuracy   : 0.486  (18/37)
+Cohen's kappa  : 0.064
 
 Confusion Matrix (rows=human, cols=judge)
           A    B
-  A     31    8
-  B     26   12
+  A     12    3
+  B     16    6
 ============================================================
