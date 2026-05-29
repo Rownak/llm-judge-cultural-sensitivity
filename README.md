@@ -144,7 +144,25 @@ Saves the bias report to `results/flip_bias/posbias_dev_set_eng_spanish_pos_bias
 
 ---
 
+## Findings (SmolLM3-3B on `dev_set_eng_spanish`)
+
+### Locale-Specific Prompts Reduce Locale Bias
+
+When comparing a simple English-only prompt (`v0`) vs. a locale-specific prompt (`v0.1`) that renders instructions in each language:
+
+| Metric | v0 (English only) | v0.1 (Locale-specific) | Change |
+|---|---:|---:|---:|
+| **en-US error rate** | 33.3% | 55.6% | +22.3pp |
+| **es-ES error rate** | 60.0% | 50.0% | −10.0pp |
+| **Locale disparity** | 26.7pp gap | 5.6pp gap | **79% reduction** |
+
+**Key insight:** The baseline judge (v0) showed severe **locale bias**, performing 1.8x worse on Spanish than English. Adding locale-specific language (v0.1) dramatically narrows this gap — at the cost of slightly higher overall error (47.4% → 52.6%). **The judge becomes fairer across locales but less accurate on average.** This suggests the baseline was overfitting to English patterns; locale-aware prompting forces it to judge on criteria that are genuinely harder to apply consistently across languages, revealing true weaknesses rather than hiding them.
+
+---
+
 ## Findings (SmolLM3-3B on `dev_set_eng_spanish_pos_bias`)
+
+### Positional Bias Resists Prompt Instruction
 
 | Prompt version | Bias rate | Always-A | Always-B | Correct on both legs |
 |---|---:|---:|---:|---:|
