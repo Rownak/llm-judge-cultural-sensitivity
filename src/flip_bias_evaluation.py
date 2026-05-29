@@ -88,7 +88,7 @@ def load_results(results_path: str) -> tuple[list[dict], dict]:
         "rubric_version": data.get("rubric_version", "unknown"),
         "n_evaluated":   data.get("n_evaluated", 0),
         "n_skipped":     data.get("n_skipped", 0),
-        "judge_version": data.get("judge_version", ""),
+        "prompt_version": data.get("prompt_version", data.get("judge_version", "")),
     }
     return data["results"], metadata
 
@@ -320,8 +320,8 @@ def format_report(metadata: dict, bias: dict,
     # ── Metadata ──────────────────────────────────────────────────────────────
     lines.append(f"Model          : {metadata['model']}")
     lines.append(f"Rubric version : {metadata['rubric_version']}")
-    if metadata["judge_version"]:
-        lines.append(f"Judge version  : {metadata['judge_version']}")
+    if metadata["prompt_version"]:
+        lines.append(f"Prompt version : {metadata['prompt_version']}")
     lines.append(f"N evaluated    : {metadata['n_evaluated']}")
     lines.append(f"N skipped      : {metadata['n_skipped']}")
     lines.append("")

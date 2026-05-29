@@ -31,7 +31,7 @@ All data is **synthetic and self-authored** — never scraped, never from real u
 |---|---|---|
 | **Synthetic dataset** ([data/](data/)) | Hand-authored prompt pairs across `en-US`, `es-ES`, with each pair having a `ground_truth_winner` and a labelled `flaw_type`. | Gives a known answer key so the judge's accuracy can be measured. |
 | **Versioned rubric** ([rubrics/](rubrics/)) | Decomposes cultural sensitivity (CS-1…CS-4) and emotional appropriateness (EA-1…EA-3) into observable sub-criteria with examples. | Forces the fuzzy construct to become concrete and reviewable. |
-| **Versioned judge prompts** ([prompts/](prompts/)) | `v0` (no rubric), `v0.1` (anti-positional-bias instruction), `v1`, `v2` (rubric-aware). | Lets us A/B prompt designs and quantify which fixes actually work. |
+| **Versioned judge prompts** ([prompts/](prompts/)) | `0` (simple), `0.1` (locale-specific language), `0.2` (anti-positional-bias), `0.3` (locale-specific + anti-bias), `1`, `2` (rubric-aware). | Lets us A/B prompt designs and quantify which fixes actually work. |
 | **Multi-model LLM-as-Judge** ([src/llm_judge.py](src/llm_judge.py), [src/llm_judge_small.py](src/llm_judge_small.py)) | Pairwise judge supporting Claude Haiku, DeepSeek, and a local HuggingFace SmolLM3-3B; emits structured JSON. | Compares judges of different sizes, costs, and providers under the same rubric. |
 | **Agreement metrics** ([src/agreement.py](src/agreement.py)) | Raw accuracy + **Cohen's kappa** + confusion matrix vs. ground truth. | A judge is worthless until you prove it agrees with humans — kappa beats accuracy because it accounts for chance. |
 | **Defect distribution** ([src/defect_distribution.py](src/defect_distribution.py)) | Breaks judge mistakes down by locale, scenario_type, primary_criterion, flaw_type, and confidence. | Tells you *where* the judge fails, not just *how often*. Drives the next iteration. |
@@ -103,7 +103,7 @@ The local SmolLM3-3B judge ([src/llm_judge_small.py](src/llm_judge_small.py)) re
 ### 1. Design (or use) a dataset
 Author or extend a CSV in [data/](data/) following the schema in [docs/synthetic_prompts_summary.md](docs/synthetic_prompts_summary.md). Each row needs a `prompt_text`, a good response, a deliberately flawed response, a `flaw_type`, and a `ground_truth_winner`.
 
-All example commands below use the **local SmolLM3-3B judge** with **prompt version v0** on the **`dev_set_eng_spanish_pos_bias`** dataset. Swap the model / prompt / dataset to suit your own runs.
+All example commands below use the **local SmolLM3-3B judge** with **prompt version 0.3** on the **`dev_set_eng_spanish_pos_bias`** dataset. Swap the model / prompt / dataset to suit your own runs.
 
 ### 2. Split into dev / test
 ```bash
@@ -119,38 +119,38 @@ Doubles every row by swapping `response_A`↔`response_B`, producing `data/dev_s
 
 ### 4. Run the judge
 ```bash
-python src/llm_judge_small.py --input data/dev_set_eng_spanish_pos_bias.csv --prompt-version v0
+python src/llm_judge_small.py --input data/dev_set_eng_spanish_pos_bias.csv --prompt-version 0.3
 ```
-Output: `results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.json`.
+Output: `results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json`.
 
 ### 5. Validate the judge — agreement vs. humans
 ```bash
-python src/agreement.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.json
+python src/agreement.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
 ```
-Saves accuracy + Cohen's kappa + confusion matrix to `results/agr_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.txt`.
+Saves accuracy + Cohen's kappa + confusion matrix to `results/agr_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`.
 
 ### 6. Diagnose failures — defect distribution
 ```bash
-python src/defect_distribution.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.json
+python src/defect_distribution.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
 ```
-Saves a per-dimension breakdown of judge mistakes to `results/defects_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.txt`.
+Saves a per-dimension breakdown of judge mistakes to `results/defects_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`.
 
 ### 7. Test for positional bias
 ```bash
-python src/flip_bias_evaluation.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.json
+python src/flip_bias_evaluation.py results/judge_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.json
 ```
-Saves the bias report to `results/posbias_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_vv0.txt`. A high `bias%` or a strong always-A / always-B pattern is the signal to iterate on the judge prompt (see [prompts/judge_prompt_v0_1.py](prompts/judge_prompt_v0_1.py) for an example mitigation).
+Saves the bias report to `results/posbias_dev_set_eng_spanish_pos_bias_HuggingFaceTB-SmolLM3-3B_v0.3.txt`. A high `bias%` or a strong always-A / always-B pattern is the signal to iterate on the judge prompt (see [prompts/judge_prompt_v0_2.py](prompts/judge_prompt_v0_2.py) for an example mitigation with anti-positional-bias instruction).
 
 ---
 
 ## Findings (SmolLM3-3B on `dev_set_eng_spanish_pos_bias`)
 
-| Judge prompt | Bias rate | Always-A | Always-B | Correct on both legs |
+| Prompt version | Bias rate | Always-A | Always-B | Correct on both legs |
 |---|---:|---:|---:|---:|
-| `v0` (no anti-bias instruction)  | 0.657 | 0.571 | 0.086 | 0.086 |
-| `v0.1` (anti-bias instruction)   | 0.632 | 0.553 | 0.079 | 0.237 |
+| `0` (simple, no anti-bias)  | 0.657 | 0.571 | 0.086 | 0.086 |
+| `0.2` (anti-bias instruction)   | 0.632 | 0.553 | 0.079 | 0.237 |
 
-The small SmolLM3-3B judge has a strong **first-position bias**: it picks response A in over half of all pairs regardless of content. Adding an explicit "do not favour a response based on position" instruction to the prompt (`v0.1`) barely moves the bias rate (0.657 → 0.632) or the always-A rate (0.571 → 0.553) — **prompt instruction alone is not enough to mitigate positional bias in a small model**, even though both-legs-correct does rise from 8.6% to 23.7%.
+The small SmolLM3-3B judge has a strong **first-position bias**: it picks response A in over half of all pairs regardless of content. Adding an explicit "do not favour a response based on position" instruction to the prompt (`0.2`) barely moves the bias rate (0.657 → 0.632) or the always-A rate (0.571 → 0.553) — **prompt instruction alone is not enough to mitigate positional bias in a small model**, even though both-legs-correct does rise from 8.6% to 23.7%.
 
 **Next step:** instead of relying on the prompt, evaluate every pair in both orderings and aggregate — e.g. take the judge's verdict only when it agrees with itself across positions, or score using a position-averaged preference. That turns positional bias from a confound into something the pipeline neutralises automatically.
 
@@ -161,7 +161,7 @@ The small SmolLM3-3B judge has a strong **first-position bias**: it picks respon
 ```
 data/         synthetic prompt datasets + dev/test splits + pos-bias splits
 docs/         PROJECT_BRIEF.md, dataset schema notes
-prompts/      versioned judge prompts (v0, v0.1, v1, v2)
+prompts/      versioned judge prompts (0, 0.1, 0.2, 0.3, 1, 2)
 rubrics/      rubric.md + JSON criteria for v1 / v2
 src/          dataset prep, judges, agreement, defect, positional-bias tools
 results/      judge_*.json plus agr_*.txt, defects_*.txt, posbias_*.txt reports
@@ -181,5 +181,5 @@ The pairwise preference judgments this pipeline produces are exactly the form of
 - **Single non-native annotator** — real evaluation needs native speakers per locale.
 - **Synthetic data** — no real-world distribution; useful for methodology demonstration only.
 - **Locale coverage** — currently English + Spanish; the rubric and pipeline are locale-agnostic but require new prompts/responses to extend.
-- **Prompt for Locale** - Prompt are english in this project. For multilingual, better to have prompt base on language.
+- **Locale-specific prompts** - Prompts are now rendered in the locale's language (English/Spanish); extends naturally to more languages.
 - **Single judge per run** — no ensembling or self-consistency yet.

@@ -36,7 +36,7 @@ def load_results(results_path: str) -> tuple[list[dict], dict]:
     tuple[list[dict], dict]
         (records, metadata)
         - records: list of individual evaluation dicts
-        - metadata: {model, rubric_version, n_evaluated, judge_version}
+        - metadata: {model, rubric_version, n_evaluated, prompt_version}
     """
     with open(results_path, encoding="utf-8") as f:
         data = json.load(f)
@@ -45,7 +45,7 @@ def load_results(results_path: str) -> tuple[list[dict], dict]:
         "model": data.get("model", "unknown"),
         "rubric_version": data.get("rubric_version", "unknown"),
         "n_evaluated": data.get("n_evaluated", 0),
-        "judge_version": data.get("judge_version", ""),
+        "prompt_version": data.get("prompt_version", data.get("judge_version", "")),
     }
 
     return data["results"], metadata
@@ -173,7 +173,7 @@ def format_report(metadata: dict, defects: dict) -> str:
     Parameters
     ----------
     metadata : dict
-        {model, rubric_version, n_evaluated, judge_version}
+        {model, rubric_version, n_evaluated, prompt_version}
     defects : dict
         Output from compute_defects()
 
@@ -195,8 +195,8 @@ def format_report(metadata: dict, defects: dict) -> str:
     # Header metadata
     lines.append(f"Model          : {metadata['model']}")
     lines.append(f"Rubric version : {metadata['rubric_version']}")
-    if metadata["judge_version"]:
-        lines.append(f"Judge version  : {metadata['judge_version']}")
+    if metadata["prompt_version"]:
+        lines.append(f"Prompt version : {metadata['prompt_version']}")
     lines.append(f"N total        : {defects['n_total']}")
 
     rate = _defect_rate(defects["n_defects"], defects["n_total"])
@@ -235,7 +235,7 @@ def print_report(metadata: dict, defects: dict) -> None:
     Parameters
     ----------
     metadata : dict
-        {model, rubric_version, n_evaluated, judge_version}
+        {model, rubric_version, n_evaluated, prompt_version}
     defects : dict
         Output from compute_defects()
     """

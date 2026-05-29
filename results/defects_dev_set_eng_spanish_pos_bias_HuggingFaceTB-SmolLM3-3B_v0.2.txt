@@ -1,0 +1,78 @@
+
+============================================================
+Defect Distribution Report
+============================================================
+
+Model          : HuggingFaceTB/SmolLM3-3B
+Rubric version : 0.1
+Judge version  : v0.1
+N total        : 77
+N defects      : 34   (rate: 0.442)
+
+------------------------------------------------------------
+Breakdown by Locale
+------------------------------------------------------------
+  locale   total  defects    rate
+  ------  ------  -------  ------
+  en-US       38       15   0.395
+  es-ES       39       19   0.487
+
+------------------------------------------------------------
+Breakdown by Scenario Type
+------------------------------------------------------------
+  scenario_type   total  defects    rate
+  -------------  ------  -------  ------
+  cultural           41       20   0.488
+  emotional          36       14   0.389
+
+------------------------------------------------------------
+Breakdown by Primary Criterion
+------------------------------------------------------------
+  criterion   total  defects    rate
+  ---------  ------  -------  ------
+  CS-1           14        7   0.500
+  CS-2            8        4   0.500
+  CS-3           11        5   0.455
+  CS-4            8        4   0.500
+  EA-1            6        3   0.500
+  EA-2           16        4   0.250
+  EA-3           14        7   0.500
+
+------------------------------------------------------------
+Breakdown by Flaw Type
+------------------------------------------------------------
+  flaw_type                             total  defects    rate
+  -----------------------------------  ------  -------  ------
+  soft_dismissive_comparison                4        4   1.000
+  register_mixed_formal_casual              4        3   0.750
+  register_too_formal                       4        3   0.750
+  premature_pivot_to_solution               4        2   0.500
+  festival_overgeneralization               4        2   0.500
+  positive_stereotype_professionalism       4        2   0.500
+  assumes_religious_practice                4        2   0.500
+  subtle_minimization                       4        2   0.500
+  food_assumption                           4        2   0.500
+  overly_bright_tone                        4        2   0.500
+  tone_slightly_overly_practical            4        1   0.250
+  informal_address_in_formal_context        4        1   0.250
+  tone_slightly_clinical                    4        1   0.250
+  faint_silver_lining                       4        1   0.250
+  minor_cultural_inaccuracy                 3        1   0.333
+  generic_empathy                           2        1   0.500
+  assumes_language_need                     2        1   0.500
+  mild_group_generalization                 2        1   0.500
+  unwarranted_family_assumption             2        1   0.500
+  age_based_overgeneralization              2        1   0.500
+  tone_overly_detached                      4        0   0.000
+  register_too_casual                       2        0   0.000
+  subtle_blame_shift                        2        0   0.000
+
+------------------------------------------------------------
+Breakdown by Confidence
+------------------------------------------------------------
+  confidence   total  defects    rate
+  ----------  ------  -------  ------
+  high            74       33   0.446
+  medium           3        1   0.333
+
+============================================================
